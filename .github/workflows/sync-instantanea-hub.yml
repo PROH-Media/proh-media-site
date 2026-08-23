@@ -118,6 +118,12 @@ jobs:
             printf 'falhar de novo.\n\n'
             printf 'Log desta falha: %s\n' "$URL"
           } > "${RUNNER_TEMP:-/tmp}/corpo.md"
-          gh issue create --repo "$REPO" --label falha --title "$TITULO" \
-            --body-file "${RUNNER_TEMP:-/tmp}/corpo.md"
-          echo "Aviso criado."
+          NOVA=$(gh issue create --repo "$REPO" --title "$TITULO" \
+            --body-file "${RUNNER_TEMP:-/tmp}/corpo.md")
+          # A etiqueta e so enfeite de organizacao. Ela fica DEPOIS da criacao e
+          # com || true de proposito: na primeira versao deste passo o aviso
+          # morria inteiro com "could not add label: 'falha' not found" porque a
+          # etiqueta nao existia no repositorio. Um alerta nao pode depender de
+          # enfeite para existir.
+          gh issue edit "$NOVA" --repo "$REPO" --add-label falha >/dev/null 2>&1 || true
+          echo "Aviso criado: $NOVA"
