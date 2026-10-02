@@ -1,0 +1,274 @@
+/* ==========================================================================
+   PROH — Sistema visual v2
+   Consolida o que já é da marca (3 cores, Gotham + Mirano, Linha do H,
+   marca-texto, cartas sobrepostas, foto P&B com cor no gesto) e acrescenta
+   elementos que nascem do verbo da marca — PROPAGAR:
+     · Ondas de propagação: um ponto que se espalha em anéis
+     · Rede do H: o humano como hub, nós ligados a um centro
+     · Rótulos técnicos: anotações editoriais sobre fotos e diagramas
+     · Grão: textura sutil nas superfícies escuras
+   ========================================================================== */
+
+:root {
+  --preto: #0F0F15;
+  --preto-2: #1A1A21;      /* superfície sobre o preto */
+  --off: #D8D4BD;
+  --off-2: #E6E3D3;        /* superfície sobre o off-white */
+  --branco: #FFFFFF;
+  --linha-clara: rgba(15, 15, 21, 0.12);
+  --linha-escura: rgba(216, 212, 189, 0.16);
+  --raio: 2rem;
+  --raio-secao: 2.5rem;
+  --curva: cubic-bezier(0.45, 0, 0.55, 1);
+}
+@media (min-width: 768px) {
+  :root { --raio: 2.5rem; --raio-secao: 3rem; }
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 6.5rem; }
+body { font-family: 'Gotham', ui-sans-serif, system-ui, sans-serif; color: var(--preto); }
+h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
+::selection { background: var(--preto); color: var(--off); }
+
+/* ---------- Rótulo de seção: número + Linha do H + nome ---------- */
+.v2-rotulo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(15, 15, 21, 0.6);
+}
+.v2-rotulo.is-escuro { color: rgba(216, 212, 189, 0.6); }
+
+/* Linha do H: duas hastes (negócio e humano) unidas por uma ponte. É o
+   divisor proprietário da marca — aqui em escala de detalhe. */
+.v2-linha-h {
+  display: inline-flex;
+  align-items: center;
+  color: currentColor;
+  flex-shrink: 0;
+}
+.v2-linha-h::before,
+.v2-linha-h::after {
+  content: '';
+  width: 2px;
+  height: 0.75rem;
+  background: currentColor;
+}
+.v2-linha-h > i {
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background: currentColor;
+}
+.v2-linha-h.is-grande::before,
+.v2-linha-h.is-grande::after { width: 3px; height: 2rem; }
+.v2-linha-h.is-grande > i { width: 3.5rem; height: 3px; }
+
+/* ---------- Marca-texto dos títulos ---------- */
+.v2-marca {
+  background: var(--preto);
+  color: var(--off);
+  padding: 0 0.28em;
+  border-radius: 0.35rem;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.v2-marca.is-clara { background: var(--off); color: var(--preto); }
+
+/* Sublinhado grosso do H1 (herdado da v1) */
+.v2-sublinhado {
+  text-decoration: underline;
+  text-decoration-color: var(--branco);
+  text-decoration-thickness: 6px;
+  text-underline-offset: 8px;
+}
+
+/* ---------- Ondas de propagação ---------- */
+.v2-ondas {
+  position: absolute;
+  aspect-ratio: 1;
+  pointer-events: none;
+  color: currentColor;
+}
+.v2-onda {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  /* estático: anéis guia, cada vez mais leves para fora */
+  transform: scale(calc((var(--i) + 1) / var(--n)));
+  opacity: calc(0.55 - var(--i) * 0.08);
+}
+.v2-ondas.is-animado .v2-onda {
+  opacity: 0;
+  animation: v2-onda var(--dur, 12s) linear infinite;
+  animation-delay: calc(var(--i) * var(--dur, 12s) / var(--n) * -1);
+  will-change: transform, opacity;
+}
+@keyframes v2-onda {
+  0%   { transform: scale(0.06); opacity: 0; }
+  12%  { opacity: 0.6; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* ponto de origem: o valor no centro */
+.v2-origem {
+  position: absolute;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--branco);
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.25);
+  transform: translate(-50%, -50%);
+}
+
+/* ---------- Rótulos técnicos sobre fotos e diagramas ---------- */
+.v2-etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(15, 15, 21, 0.72);
+  color: var(--off);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(216, 212, 189, 0.18);
+  white-space: nowrap;
+}
+.v2-etiqueta.is-clara {
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--preto);
+  border-color: rgba(15, 15, 21, 0.08);
+}
+.v2-etiqueta > b {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---------- Grão nas superfícies escuras ---------- */
+.v2-grao { position: relative; isolation: isolate; }
+.v2-grao::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+}
+
+/* ---------- Fotografia da marca: P&B, cor no gesto ---------- */
+.v2-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.04);
+  transition: filter 0.6s ease, transform 1.2s var(--curva);
+}
+.v2-foto-moldura { overflow: hidden; position: relative; }
+.v2-foto-moldura:hover .v2-foto { filter: grayscale(0) contrast(1); transform: scale(1.02); }
+
+/* ---------- Revelação no scroll ---------- */
+.v2-revela {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease-out, transform 0.9s var(--curva);
+  transition-delay: var(--atraso, 0ms);
+}
+.v2-revela.is-visivel { opacity: 1; transform: none; }
+
+/* ---------- Pilha de cartas (assinatura da v1, consolidada) ---------- */
+.v2-carta {
+  position: relative;
+  border-top-left-radius: var(--raio-secao);
+  border-top-right-radius: var(--raio-secao);
+  margin-top: calc(var(--raio-secao) * -1);
+  overflow: hidden;
+}
+.v2-carta.is-primeira { margin-top: 0; border-radius: 0; }
+@media (min-width: 768px) {
+  .v2-carta { position: sticky; top: 0; }
+}
+.v2-sombra-clara { box-shadow: 0 -20px 50px rgba(15, 15, 21, 0.14); }
+.v2-sombra-escura { box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.4); }
+
+/* ---------- Faixa de mensagens ---------- */
+.v2-faixa { display: flex; overflow: hidden; }
+.v2-faixa-trilho {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  animation: v2-faixa 76s linear infinite;
+}
+@keyframes v2-faixa { to { transform: translateX(-100%); } }
+
+/* ---------- Método: anéis ---------- */
+.v2-anel { transition: fill 0.6s var(--curva), stroke 0.6s var(--curva), stroke-width 0.6s var(--curva); }
+.v2-anel-rotulo { transition: fill 0.6s var(--curva), opacity 0.6s var(--curva); }
+.v2-pulso {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: v2-pulso 6s ease-out infinite;
+}
+@keyframes v2-pulso {
+  0%   { transform: scale(0.1); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 0; }
+}
+.v2-passo-texto {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s var(--curva), opacity 0.5s var(--curva);
+  opacity: 0;
+}
+.v2-passo-texto > div { overflow: hidden; }
+.is-ativo > .v2-passo-texto { grid-template-rows: 1fr; opacity: 1; }
+
+/* ---------- Diagrama da distância ---------- */
+.v2-barra {
+  height: 0.625rem;
+  border-radius: 999px;
+  transform-origin: left center;
+  transition: transform 1.4s var(--curva);
+}
+.v2-revela:not(.is-visivel) .v2-barra { transform: scaleX(0); }
+
+/* ---------- Acordeão (FAQ) e menu ---------- */
+.v2-abre {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s var(--curva);
+}
+.v2-abre > div { overflow: hidden; }
+.v2-abre.is-aberto { grid-template-rows: 1fr; }
+
+/* ---------- Rede do H ---------- */
+.v2-rede-no { transform-box: fill-box; transform-origin: center; }
+.v2-rede-centro { animation: v2-respira 4s ease-in-out infinite; }
+@keyframes v2-respira {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+/* ---------- Acessibilidade: menos movimento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .v2-revela { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .v2-ondas.is-animado .v2-onda {
+    animation: none !important;
+    opacity: calc(0.55 - var(--i) * 0.08) !important;
+    transform: scale(calc((var(--i) + 1) / var(--n))) !important;
+  }
+  .v2-faixa-trilho, .v2-pulso, .v2-rede-centro { animation: none !important; }
+  .v2-barra { transition: none !important; }
+}
