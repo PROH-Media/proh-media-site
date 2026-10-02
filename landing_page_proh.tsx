@@ -621,12 +621,29 @@ export default function App() {
            inclusive o will-change: transform, que cria contenção mesmo com
            position: static. A moldura guarda a altura do card, senão o
            conteúdo abaixo saltaria quando ele voltasse ao fluxo. */
-        /* Enquanto a foto está em tela cheia o hero sobe na pilha e cobre
-           o topo arredondado da seção seguinte. Isso vale SÓ durante a
-           escrita da marca: quando a foto começa a recolher, o hero desce e
-           a seção seguinte já está no lugar dela — se a troca ficasse para
-           o fim, os cantos dela pipocariam de repente sobre o hero. */
-        #hero.hero-abrindo { z-index: 95; }
+        /* Durante a abertura inteira o hero fica acima de tudo: a foto só
+           deixa de cobrir o resto quando pousa no card. Mas a seção seguinte
+           precisa já estar no lugar, ATRÁS da foto, quando ela começa a
+           recolher — senão os cantos dela pipocam no fim. Por isso, nesse
+           período, o hero não pinta o bege sobre a faixa em que o Conceito
+           monta nele (2,5rem / 3rem): pinta só os dois cantinhos fora das
+           curvas do Conceito. Visualmente é idêntico ao estado final, então a
+           troca de camada no fim não muda nenhum pixel. */
+        #hero.hero-abertura-ativa {
+          z-index: 95;
+          --faixa: 2.5rem;
+          background:
+            linear-gradient(#D8D4BD, #D8D4BD) top / 100% calc(100% - var(--faixa)) no-repeat,
+            radial-gradient(circle var(--faixa) at 100% 100%, transparent calc(var(--faixa) - 0.5px), #D8D4BD var(--faixa)) left bottom / var(--faixa) var(--faixa) no-repeat,
+            radial-gradient(circle var(--faixa) at 0% 100%, transparent calc(var(--faixa) - 0.5px), #D8D4BD var(--faixa)) right bottom / var(--faixa) var(--faixa) no-repeat;
+        }
+        @media (min-width: 768px) {
+          #hero.hero-abertura-ativa { --faixa: 3rem; }
+        }
+        /* a sombra do Conceito sobre o hero só existe quando ele está por
+           cima; durante a abertura ela fica desligada e entra devagar no fim */
+        #conceito { transition: box-shadow 0.8s ease-out; }
+        #hero.hero-abertura-ativa ~ #conceito { box-shadow: none; }
         #hero.hero-abertura-ativa .hero-conteudo-caixa { position: static !important; }
         #hero.hero-abertura-ativa .hero-foto-moldura {
           position: static !important;
@@ -808,7 +825,7 @@ export default function App() {
       `}} />
 
       {/* HEADER: pílula flutuante que adapta o tema à seção sob ela */}
-      <header className={`fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 pt-4 md:pt-5 transition-opacity duration-700 ${introAtiva ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 pt-4 md:pt-5 transition-opacity duration-700 ${introFase !== 'pronto' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <div
           className={`max-w-7xl mx-auto border overflow-hidden rounded-[2rem] transition-all duration-300 ${
             headerDark
