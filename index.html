@@ -108,6 +108,16 @@
       ]
     }
     </script>
+
+    <style>
+      /* Primeiro paint na cor da marca (evita flash branco) */
+      body { margin: 0; background: #D8D4BD; }
+      /* Conteúdo indexável: invisível enquanto o app carrega; só aparece
+         (após 2s) para quem navega sem JavaScript. Crawlers leem o texto
+         no HTML independentemente da opacidade. */
+      #root > main { opacity: 0; animation: seo-reveal 0.4s ease 2s forwards; }
+      @keyframes seo-reveal { to { opacity: 1; } }
+    </style>
   </head>
   <body>
     <div id="root">
