@@ -14,3 +14,6 @@ yarn-error.log*
 # Configuração real da Evolution (vive só na VPS)
 infra/evolution/.env
 whatsapp_config.json
+
+# Fotos originais em alta (materia-prima local; o site usa as otimizadas em public/img)
+Fotos/
