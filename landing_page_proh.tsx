@@ -694,19 +694,27 @@ export default function App() {
         /* GRAMÁTICA ÚNICA DAS LETRAS — vale para a entrada de PROPAGAR, para a
            saída de PAGAR e para a entrada do H, sem exceção:
              · a letra (opacidade, desfoque, deslocamento) leva 0,8s em ease-out
-             · o espaço dela leva 1s em ritmo constante
+             · o espaço dela leva 1s, acelerando e desacelerando suave
              · há 0,4s de defasagem entre a letra e o seu espaço
            Antes o H tinha durações próprias (1,2s) e a entrada misturava três
            curvas diferentes — daí a sensação de que cada coisa andava num
-           compasso. A largura é linear porque vários espaços se movem ao mesmo
-           tempo e o olho vê a soma: aceleração por letra viraria ondulação. */
+           compasso. O olho acompanha a SOMA dos espaços fechando (é ela que
+           desliza a palavra para o centro). Com largura linear, cada espaço
+           liga e desliga a velocidade de uma vez, e como fecham 1, 2 ou 3 ao
+           mesmo tempo a soma andava em degraus (78→157→237→160 px/s): a
+           palavra parecia ir e travar. Com a curva suave a soma vira uma
+           rampa contínua, estável em ~210 px/s, e termina no mesmo instante.
+           É a mesma curva com que a foto recolhe até o card. */
         .hero-marca-letra {
           opacity: 0;
           transform: translateY(0.22em);
           filter: blur(12px);
           transition-property: opacity, transform, filter, width;
           transition-duration: 0.8s, 0.8s, 0.8s, 1s;
-          transition-timing-function: ease-out, ease-out, ease-out, linear;
+          transition-timing-function: ease-out, ease-out, ease-out, cubic-bezier(0.45, 0, 0.55, 1);
+          /* cada letra vira uma camada própria da GPU: o desfoque em letras
+             deste tamanho não é repintado a cada quadro do deslize */
+          will-change: opacity, transform, filter;
           transition-delay: calc(var(--i, 0) * 90ms),
                             calc(var(--i, 0) * 90ms),
                             calc(var(--i, 0) * 90ms),
@@ -758,7 +766,8 @@ export default function App() {
              as letras de PAGAR saem, só que na ordem inversa */
           transition-property: opacity, filter, width;
           transition-duration: 0.8s, 0.8s, 1s;
-          transition-timing-function: ease-out, ease-out, linear;
+          transition-timing-function: ease-out, ease-out, cubic-bezier(0.45, 0, 0.55, 1);
+          will-change: opacity, filter;
         }
         .hero-marca-palavra.fase-proh .hero-marca-h {
           width: var(--w, auto);
