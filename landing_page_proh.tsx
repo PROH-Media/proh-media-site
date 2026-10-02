@@ -50,6 +50,11 @@ export default function App() {
   });
   const introAtiva = introFase === 'propagar' || introFase === 'pro' || introFase === 'proh';
   const [letrasDentro, setLetrasDentro] = useState(false);
+  // Carregamento da abertura: a tela nasce preta; a foto entra por cima
+  // (opacidade + desfoque) só depois de decodificada, e o preto sai de trás
+  // dela quando ela termina de aparecer.
+  const [fotoPronta, setFotoPronta] = useState(false);
+  const [pretoSaiu, setPretoSaiu] = useState(false);
   const palavraRef = useRef(null);
   const molduraRef = useRef(null);
 
@@ -140,16 +145,44 @@ export default function App() {
     //   +1,0s de pausa  →  o H entra (1,2s)
     //   +2,0s de pausa  →  a foto recolhe até o card (2,0s)
     const relogios = [];
+    let encerrado = false;
+
+    // A foto precisa estar 100% decodificada antes de entrar: senão ela se
+    // desenha em faixas sobre o preto. Se demorar demais (rede lenta), a
+    // abertura segue mesmo assim depois de 4s.
+    const aguardarFoto = () => {
+      const img = document.querySelector('.hero-foto-card img');
+      if (!img) return Promise.resolve();
+      const carregada = img.complete && img.naturalWidth > 0
+        ? Promise.resolve()
+        : new Promise((ok) => {
+            img.addEventListener('load', ok, { once: true });
+            img.addEventListener('error', ok, { once: true });
+          });
+      const decodificada = carregada.then(() => (img.decode ? img.decode().catch(() => {}) : null));
+      const limite = new Promise((ok) => relogios.push(setTimeout(ok, 4000)));
+      return Promise.race([decodificada, limite]);
+    };
+
     const iniciarRoteiro = () => {
-      // A escrita começa no quadro seguinte, para as transições de entrada
-      // saírem do estado inicial em vez de já nascerem prontas.
-      quadro = requestAnimationFrame(() =>
-        requestAnimationFrame(() => setLetrasDentro(true))
-      );
-      relogios.push(setTimeout(() => setIntroFase('pro'), 2000));
-      relogios.push(setTimeout(() => setIntroFase('proh'), 5900));
-      relogios.push(setTimeout(() => { mirarNoCard(); setIntroFase('saindo'); }, 9100));
-      relogios.push(setTimeout(() => setIntroFase('pronto'), 11100));
+      aguardarFoto().then(() => {
+        if (encerrado) return;
+        // A foto surge sobre o preto e a escrita começa junto, no quadro
+        // seguinte, para as transições saírem do estado inicial em vez de
+        // já nascerem prontas.
+        quadro = requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            setFotoPronta(true);
+            setLetrasDentro(true);
+          })
+        );
+        // o preto sai quando a foto já cobre tudo (fim da entrada de 1s)
+        relogios.push(setTimeout(() => setPretoSaiu(true), 1100));
+        relogios.push(setTimeout(() => setIntroFase('pro'), 2000));
+        relogios.push(setTimeout(() => setIntroFase('proh'), 5900));
+        relogios.push(setTimeout(() => { mirarNoCard(); setIntroFase('saindo'); }, 9100));
+        relogios.push(setTimeout(() => setIntroFase('pronto'), 11100));
+      });
     };
 
     // Aba em segundo plano não roda requestAnimationFrame e estrangula os
@@ -166,6 +199,7 @@ export default function App() {
 
     // Qualquer intenção de navegar adianta para o fim.
     const pular = () => {
+      encerrado = true;
       relogios.forEach(clearTimeout);
       setIntroFase('pronto');
     };
@@ -180,6 +214,7 @@ export default function App() {
     window.addEventListener('pointerdown', pular);
 
     return () => {
+      encerrado = true;
       cancelAnimationFrame(quadro);
       relogios.forEach(clearTimeout);
       document.removeEventListener('visibilitychange', aoFicarVisivel);
@@ -591,7 +626,9 @@ export default function App() {
            seção inteira; ao recolher, volta exatamente para onde nasceu. */
         .hero-foto-card.is-abrindo {
           position: absolute;
-          z-index: 30;
+          /* acima do menu (100) e de todas as seções: o hero não forma
+             camada própria durante a abertura (ver #hero.hero-abertura-ativa) */
+          z-index: 150;
           /* o card tem w-full/h-full: com largura explícita os right/bottom
              seriam ignorados e só a posição viajaria, não o tamanho */
           width: auto;
@@ -606,7 +643,14 @@ export default function App() {
                       bottom 2s cubic-bezier(0.45, 0, 0.55, 1),
                       left 2s cubic-bezier(0.45, 0, 0.55, 1),
                       border-radius 0.5s cubic-bezier(0.45, 0, 0.55, 1),
-                      box-shadow 0.5s ease-out;
+                      box-shadow 0.5s ease-out,
+                      opacity 1s ease-out,
+                      filter 1s ease-out;
+        }
+        /* entrada da foto sobre o preto, só depois de decodificada */
+        .hero-foto-card.is-abrindo:not(.foto-pronta) {
+          opacity: 0;
+          filter: blur(18px);
         }
         .hero-foto-card.is-abrindo.is-recolhendo {
           top: var(--card-top, 0px);
@@ -621,30 +665,23 @@ export default function App() {
            inclusive o will-change: transform, que cria contenção mesmo com
            position: static. A moldura guarda a altura do card, senão o
            conteúdo abaixo saltaria quando ele voltasse ao fluxo. */
-        /* Durante a abertura inteira o hero fica acima de tudo: a foto só
-           deixa de cobrir o resto quando pousa no card. Mas a seção seguinte
-           precisa já estar no lugar, ATRÁS da foto, quando ela começa a
-           recolher — senão os cantos dela pipocam no fim. Por isso, nesse
-           período, o hero não pinta o bege sobre a faixa em que o Conceito
-           monta nele (2,5rem / 3rem): pinta só os dois cantinhos fora das
-           curvas do Conceito. Visualmente é idêntico ao estado final, então a
-           troca de camada no fim não muda nenhum pixel. */
+        /* Durante a abertura o hero NÃO forma camada própria (sem z-index,
+           relative em vez de sticky). Assim a foto (150) e o véu com a marca
+           (160) sobem sozinhos acima de tudo, enquanto o bege do hero, a
+           seção seguinte (20) e o menu (100) ficam no lugar de sempre, por
+           baixo dela — e vão sendo revelados conforme a foto recolhe. No fim
+           o hero volta a ser camada (sticky, 10) sem mudar nenhum pixel.
+           O top vem do JS da pilha de cartas e, em relative, deslocaria a
+           seção: por isso volta a auto aqui. */
         #hero.hero-abertura-ativa {
-          z-index: 95;
-          --faixa: 2.5rem;
-          background:
-            linear-gradient(#D8D4BD, #D8D4BD) top / 100% calc(100% - var(--faixa)) no-repeat,
-            radial-gradient(circle var(--faixa) at 100% 100%, transparent calc(var(--faixa) - 0.5px), #D8D4BD var(--faixa)) left bottom / var(--faixa) var(--faixa) no-repeat,
-            radial-gradient(circle var(--faixa) at 0% 100%, transparent calc(var(--faixa) - 0.5px), #D8D4BD var(--faixa)) right bottom / var(--faixa) var(--faixa) no-repeat;
+          position: relative !important;
+          z-index: auto !important;
+          top: auto !important;
         }
-        @media (min-width: 768px) {
-          #hero.hero-abertura-ativa { --faixa: 3rem; }
-        }
-        /* a sombra do Conceito sobre o hero só existe quando ele está por
-           cima; durante a abertura ela fica desligada e entra devagar no fim */
-        #conceito { transition: box-shadow 0.8s ease-out; }
-        #hero.hero-abertura-ativa ~ #conceito { box-shadow: none; }
-        #hero.hero-abertura-ativa .hero-conteudo-caixa { position: static !important; }
+        /* o z-index também precisa sair: a caixa é item flex do hero, e item
+           flex com z-index cria camada mesmo sem posicionamento — a foto
+           ficaria presa nela (10), abaixo do menu (100) */
+        #hero.hero-abertura-ativa .hero-conteudo-caixa { position: static !important; z-index: auto !important; }
         #hero.hero-abertura-ativa .hero-foto-moldura {
           position: static !important;
           will-change: auto !important;
@@ -656,7 +693,7 @@ export default function App() {
         .hero-abertura {
           position: absolute;
           inset: 0;
-          z-index: 40;
+          z-index: 160;
           overflow: hidden;
           pointer-events: none;
         }
@@ -825,7 +862,7 @@ export default function App() {
       `}} />
 
       {/* HEADER: pílula flutuante que adapta o tema à seção sob ela */}
-      <header className={`fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 pt-4 md:pt-5 transition-opacity duration-700 ${introFase !== 'pronto' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-[100] px-6 md:px-12 pt-4 md:pt-5 transition-opacity duration-700`}>
         <div
           className={`max-w-7xl mx-auto border overflow-hidden rounded-[2rem] transition-all duration-300 ${
             headerDark
@@ -909,6 +946,12 @@ export default function App() {
           usam md:sticky — cada uma gruda no topo e a seguinte desliza por cima.
           Da seção Soluções em diante, o fluxo volta ao normal. */}
 
+      {/* Preto do carregamento: acima do menu e das seções, abaixo da foto
+          da abertura. Sai de trás da foto quando ela termina de aparecer. */}
+      {introFase !== 'pronto' && !pretoSaiu && (
+        <div className="fixed inset-0 z-[145] bg-[#0F0F15] pointer-events-none" aria-hidden="true" />
+      )}
+
       {/* SEÇÃO 1 — HERO */}
       <section id="hero" className={`stack-card z-[10] w-full min-h-screen flex flex-col justify-center overflow-hidden bg-[#D8D4BD] ${introAtiva ? 'hero-abrindo' : ''} ${introFase !== 'pronto' ? 'hero-abertura-ativa' : ''}`}>
         {/* Abertura: foto em tela cheia + a marca se escrevendo por cima */}
@@ -971,7 +1014,7 @@ export default function App() {
               destacam. É este mesmo card que faz a abertura — não há cópia
               da imagem: ele sai daqui, cobre a seção e volta. */}
           <div ref={molduraRef} className="hero-foto-moldura animate-on-scroll delay-300 relative">
-            <div className={`hero-foto-card relative w-full h-64 sm:h-80 lg:absolute lg:inset-0 lg:h-full rounded-[2rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden ${introFase !== 'pronto' ? 'is-abrindo' : ''} ${introFase === 'saindo' ? 'is-recolhendo' : ''}`}>
+            <div className={`hero-foto-card relative w-full h-64 sm:h-80 lg:absolute lg:inset-0 lg:h-full rounded-[2rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden ${introFase !== 'pronto' ? 'is-abrindo' : ''} ${fotoPronta ? 'foto-pronta' : ''} ${introFase === 'saindo' ? 'is-recolhendo' : ''}`}>
               <img
                 src="/img/multidao-praca.jpg"
                 alt="Vista do alto de uma praça movimentada, com cinco pessoas paradas em destaque no meio da multidão"
@@ -985,7 +1028,7 @@ export default function App() {
         </div>
 
         {/* Faixa: sistema de mensagens da marca */}
-        <div className={`absolute bottom-0 left-0 right-0 bg-[#D8D4BD] pt-4 pb-16 transition-opacity duration-700 ${introAtiva ? 'opacity-0' : 'opacity-100'}`} aria-hidden="true">
+        <div className="absolute bottom-0 left-0 right-0 bg-[#D8D4BD] pt-4 pb-16" aria-hidden="true">
           <Marquee />
         </div>
       </section>
