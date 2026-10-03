@@ -152,7 +152,7 @@ export default function AppV2() {
       </header>
 
       {/* ================= HERO ================= */}
-      <section id="inicio" data-tema="claro" className="v2-carta is-primeira z-[10] bg-[#D8D4BD] v2-papel min-h-screen flex flex-col justify-center pt-28 md:pt-32 pb-36">
+      <section id="inicio" data-tema="claro" className="v2-carta is-primeira z-[10] bg-[#D8D4BD] v2-grao is-claro min-h-screen flex flex-col justify-center pt-28 md:pt-32 pb-36">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid lg:grid-cols-[1.08fr_0.92fr] gap-12 lg:gap-16 items-center">
           <div>
             <p className="v2-rotulo v2-revela mb-7"><span className="v2-linha-h" aria-hidden="true"><i /></span>Agência estratégica de marca, mídia e impacto</p>
@@ -201,7 +201,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 01 CONCEITO ================= */}
-      <section id="conceito" data-tema="escuro" className="v2-carta v2-pedra v2-sombra-escura z-[20] bg-[#0F0F15] text-[#D8D4BD] md:min-h-screen flex flex-col justify-center py-24">
+      <section id="conceito" data-tema="escuro" className="v2-carta v2-grao v2-sombra-escura z-[20] bg-[#0F0F15] text-[#D8D4BD] md:min-h-screen flex flex-col justify-center py-24">
         <Ondas className="w-[70rem] -right-[30rem] -top-[24rem] text-[#D8D4BD] opacity-[0.12]" aneis={7} />
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-12 md:gap-16 items-center relative">
           <div className="v2-revela">
@@ -262,7 +262,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 02 SIGNIFICADO ================= */}
-      <section id="significado" data-tema="claro" className="v2-carta v2-sombra-clara z-[30] bg-[#D8D4BD] v2-papel md:min-h-screen flex flex-col justify-center py-24">
+      <section id="significado" data-tema="claro" className="v2-carta v2-sombra-clara z-[30] bg-[#D8D4BD] v2-grao is-claro md:min-h-screen flex flex-col justify-center py-24">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12 md:mb-14">
             <Rotulo n="02">O significado</Rotulo>
@@ -358,7 +358,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 04 SOLUÇÕES ================= */}
-      <section id="solucoes" data-tema="claro" className="v2-carta v2-sombra-clara z-[50] bg-[#D8D4BD] v2-papel py-24 md:py-28">
+      <section id="solucoes" data-tema="claro" className="v2-carta v2-sombra-clara z-[50] bg-[#D8D4BD] v2-grao is-claro py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12 md:mb-14">
             <Rotulo n="04">Soluções</Rotulo>
@@ -396,7 +396,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 05 MÉTODO ================= */}
-      <section id="metodo" data-tema="escuro" className="v2-carta v2-pedra v2-sombra-escura z-[60] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-28">
+      <section id="metodo" data-tema="escuro" className="v2-carta v2-grao v2-sombra-escura z-[60] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <Metodo />
         </div>
@@ -442,7 +442,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 07 PARA QUEM ================= */}
-      <section id="publicos" data-tema="claro" className="v2-carta v2-sombra-clara z-[80] bg-[#D8D4BD] v2-papel py-24 md:py-28">
+      <section id="publicos" data-tema="claro" className="v2-carta v2-sombra-clara z-[80] bg-[#D8D4BD] v2-grao is-claro py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12">
             <Rotulo n="07">Para quem</Rotulo>
@@ -465,7 +465,7 @@ export default function AppV2() {
                 </div>
               ))}
             </div>
-            <div className="v2-revela v2-pedra rounded-[var(--raio)] text-[#D8D4BD] overflow-hidden flex flex-col" style={{ '--atraso': '150ms' } as React.CSSProperties}>
+            <div className="v2-revela v2-grao bg-[#0F0F15] rounded-[var(--raio)] text-[#D8D4BD] overflow-hidden flex flex-col" style={{ '--atraso': '150ms' } as React.CSSProperties}>
               <figure className="v2-foto-moldura relative h-64">
                 <img src="/img/marca/retrato-lideranca.webp" alt="Retrato de uma líder de olhar sereno e confiante em um escritório com plantas" className="v2-foto absolute inset-0" style={{ objectPosition: '50% 22%' }} loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F15] via-transparent to-transparent" />
@@ -485,7 +485,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 08 IMPACTO ================= */}
-      <section id="impacto" data-tema="escuro" className="v2-carta v2-pedra v2-sombra-escura z-[90] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-28">
+      <section id="impacto" data-tema="escuro" className="v2-carta v2-grao v2-sombra-escura z-[90] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="v2-revela">
             <Rotulo n="08" escuro>Impacto</Rotulo>
@@ -516,16 +516,16 @@ export default function AppV2() {
               <img src="/img/v2/voz-comunidade.webp" alt="Mulher fala para um círculo de vizinhos de várias idades em um centro comunitário iluminado pelo fim de tarde" className="v2-foto absolute inset-0" loading="lazy" />
               <span className="v2-etiqueta absolute left-4 top-4"><b />Voz · comunidade</span>
             </figure>
-            <div className="v2-terracota rounded-[var(--raio)] p-8 md:p-10 flex items-center gap-6 shadow-2xl">
-              <span className="v2-linha-h is-grande text-white/80 hidden sm:inline-flex" aria-hidden="true"><i /></span>
-              <p className="text-2xl md:text-3xl font-black text-white leading-snug">Causas relevantes também merecem marcas fortes.</p>
+            <div className="v2-grao is-claro bg-[#D8D4BD] text-[#0F0F15] rounded-[var(--raio)] p-8 md:p-10 flex items-center gap-6 shadow-2xl">
+              <span className="v2-linha-h is-grande text-[#0F0F15]/60 hidden sm:inline-flex" aria-hidden="true"><i /></span>
+              <p className="text-2xl md:text-3xl font-black leading-snug">Causas relevantes também merecem marcas fortes.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ================= 09 MODELOS ================= */}
-      <section id="modelos" data-tema="claro" className="v2-carta v2-sombra-clara z-[100] bg-[#D8D4BD] v2-papel py-24 md:py-28">
+      <section id="modelos" data-tema="claro" className="v2-carta v2-sombra-clara z-[100] bg-[#D8D4BD] v2-grao is-claro py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12">
             <Rotulo n="09">Modelos de parceria</Rotulo>
@@ -540,11 +540,11 @@ export default function AppV2() {
               ['Sprint de propagação', 'Para objetivos concentrados e períodos específicos.', ['Lançamentos', 'Eventos', 'Campanhas', 'Captação']],
               ['Consultoria e direção', 'Para equipes internas que precisam de orientação.', ['Planejamento', 'Governança de marca', 'Processos', 'Direção de fornecedores']],
             ].map(([t, d, it], k) => (
-              <div key={t as string} className="v2-revela v2-kraft rounded-[var(--raio)] p-7 flex flex-col shadow-lg" style={{ '--atraso': `${k * 80}ms` } as React.CSSProperties}>
+              <div key={t as string} className="v2-revela v2-grao is-claro bg-[#E6E3D3] border border-white/60 rounded-[var(--raio)] p-7 flex flex-col" style={{ '--atraso': `${k * 80}ms` } as React.CSSProperties}>
                 <div className="relative w-10 h-10 mb-7 text-[#0F0F15]"><Ondas className="inset-0 w-full" aneis={k + 2} /></div>
                 <h3 className="text-lg font-black uppercase tracking-tight mb-3">{t as string}</h3>
-                <p className="text-[#0F0F15]/80 leading-relaxed mb-6">{d as string}</p>
-                <ul className="mt-auto space-y-2 border-t border-[#0F0F15]/20 pt-5">
+                <p className="text-[#0F0F15]/70 leading-relaxed mb-6">{d as string}</p>
+                <ul className="mt-auto space-y-2 border-t border-[#0F0F15]/12 pt-5">
                   {(it as string[]).map((x) => <li key={x} className="flex items-center gap-2 text-sm font-medium"><span className="w-1.5 h-1.5 rounded-full bg-[#0F0F15]/60" />{x}</li>)}
                 </ul>
               </div>
@@ -559,7 +559,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 10 MANIFESTO ================= */}
-      <section id="manifesto" data-tema="escuro" className="v2-carta v2-pedra v2-sombra-escura z-[110] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-32">
+      <section id="manifesto" data-tema="escuro" className="v2-carta v2-grao v2-sombra-escura z-[110] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-32">
         {/* a gota no centro e os anéis: a imagem-símbolo da propagação */}
         <img src="/img/v2/ondas-propagacao.webp" alt="" aria-hidden="true" loading="lazy" className="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[80rem] max-w-none opacity-30 pointer-events-none" style={{ WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 30%, transparent 68%)', maskImage: 'radial-gradient(circle at 50% 50%, black 30%, transparent 68%)' }} />
         <div className="relative max-w-7xl w-full mx-auto px-6 md:px-12 grid md:grid-cols-[1.1fr_1fr] gap-12 md:gap-20 items-start">
@@ -609,7 +609,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 12 CONTATO ================= */}
-      <section id="contato" data-tema="claro" className="v2-carta v2-sombra-clara z-[130] bg-[#D8D4BD] v2-papel py-24 md:py-28">
+      <section id="contato" data-tema="claro" className="v2-carta v2-sombra-clara z-[130] bg-[#D8D4BD] v2-grao is-claro py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <div className="v2-revela lg:sticky lg:top-28">
             <Rotulo n="12">Contato</Rotulo>
@@ -633,7 +633,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= RODAPÉ ================= */}
-      <footer className="v2-pedra relative z-[140] text-[#D8D4BD] pb-12 overflow-hidden rounded-t-[var(--raio-secao)] -mt-[var(--raio-secao)] shadow-[0_-20px_50px_rgba(0,0,0,0.45)]">
+      <footer className="v2-grao relative z-[140] bg-[#0F0F15] text-[#D8D4BD] pb-12 overflow-hidden rounded-t-[var(--raio-secao)] -mt-[var(--raio-secao)] shadow-[0_-20px_50px_rgba(0,0,0,0.45)]">
         <div className="v2-calcada h-16 md:h-20 mb-16" aria-hidden="true" />
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-12 mb-14">

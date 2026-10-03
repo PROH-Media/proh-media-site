@@ -12,7 +12,7 @@ import { Proh, Ondas, Rede, Direcao, Subida } from '../v2/AppV2';
 const CAPITULOS = [
   ['essencia', 'Essência'], ['voz', 'Tom de voz'], ['logo', 'Logo'], ['cores', 'Cores'],
   ['tipografia', 'Tipografia'], ['elementos', 'Elementos gráficos'], ['fotografia', 'Fotografia'],
-  ['texturas', 'Texturas'], ['icones', 'Iconografia'], ['aplicacoes', 'Aplicações'], ['downloads', 'Downloads'],
+  ['texturas', 'Ruído e onda'], ['icones', 'Iconografia'], ['aplicacoes', 'Aplicações'], ['downloads', 'Downloads'],
 ];
 
 const CORES = [
@@ -23,8 +23,8 @@ const CORES = [
 
 // Tons extraídos das próprias fotografias e texturas da marca
 const APOIO = [
-  { nome: 'Terracota', hex: '#C2643A', rgb: '194, 100, 58', origem: 'reboco, barro, tijolo', texto: '#FFFFFF' },
-  { nome: 'Caramelo', hex: '#C69A6C', rgb: '198, 154, 108', origem: 'kraft, madeira clara, pele', texto: '#0F0F15' },
+  { nome: 'Terracota', hex: '#C2643A', rgb: '194, 100, 58', origem: 'barro, tijolo, cerâmica', texto: '#FFFFFF' },
+  { nome: 'Caramelo', hex: '#C69A6C', rgb: '198, 154, 108', origem: 'madeira clara, pele, luz de fim de tarde', texto: '#0F0F15' },
   { nome: 'Barro', hex: '#703F20', rgb: '112, 63, 32', origem: 'cerâmica, couro, terra', texto: '#FFFFFF' },
   { nome: 'Oliva', hex: '#505140', rgb: '80, 81, 64', origem: 'plantas, linho, tecido', texto: '#FFFFFF' },
 ];
@@ -59,13 +59,7 @@ const FOTOS = [
   ['retrato-lideranca', 'Liderança', 'Retrato ambiental, olhar direto e sereno.'],
 ];
 
-const TEXTURAS = [
-  ['textura-calcada-ondas', 'Calçada em ondas', 'A propagação em pedra: Brasil, ritmo e onda. Faixas, rodapés, capas.'],
-  ['textura-papel-off', 'Papel off-white', 'Superfícies claras com tato de papel. Fundos de seção e impressos.'],
-  ['textura-escura-pedra', 'Pedra escura', 'Profundidade para o preto. Seções escuras, capas, cartões.'],
-  ['textura-kraft', 'Kraft', 'Calor e processo. Cartões, propostas, bastidores.'],
-  ['textura-reboco-terracota', 'Reboco terracota', 'Cor de destaque com matéria. Citações, campanhas, impacto.'],
-];
+
 
 // ==========================================================================
 export default function BrandKit() {
@@ -80,7 +74,7 @@ export default function BrandKit() {
   return (
     <div className="bg-[#D8D4BD] text-[#0F0F15] min-h-screen">
       {/* ---------- CAPA ---------- */}
-      <header className="relative overflow-hidden bg-[#0F0F15] text-[#D8D4BD] min-h-[92vh] flex flex-col" style={{ backgroundImage: 'url(/img/marca/textura-escura-pedra.webp)', backgroundSize: '512px' }}>
+      <header className="v2-grao relative overflow-hidden bg-[#0F0F15] text-[#D8D4BD] min-h-[92vh] flex flex-col">
         <Ondas className="w-[90rem] -right-[38rem] top-1/2 -translate-y-1/2 text-[#D8D4BD]/40" aneis={8} animado dur={18} />
         <div className="relative max-w-6xl w-full mx-auto px-6 md:px-12 pt-10 flex items-center justify-between">
           <img src="/SVG/proh-white-off.svg" alt="PROH Media" className="h-10" />
@@ -423,19 +417,40 @@ export default function BrandKit() {
             </Cartao>
           </Capitulo>
 
-          {/* ================= 08 TEXTURAS ================= */}
-          <Capitulo id="texturas" n="08" titulo="Texturas" lead="Matéria para tirar a marca do digital chapado: pedra, papel, kraft e reboco. Sempre em fundo, nunca competindo com o texto.">
-            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
-              {TEXTURAS.map(([arq, t, d], k) => (
-                <a key={arq} href={`/img/marca/${arq}.webp`} download className={`group rounded-[1.75rem] overflow-hidden border border-[#0F0F15]/10 bg-white ${k === 0 ? 'sm:col-span-2 xl:col-span-1' : ''}`}>
-                  <div className="h-48" style={{ backgroundImage: `url(/img/marca/${arq}.webp)`, backgroundSize: k === 0 ? '360px' : 'cover', backgroundPosition: 'center' }} />
-                  <div className="p-5">
-                    <div className="flex items-center justify-between mb-1"><p className="font-black uppercase tracking-tight">{t}</p><Download size={15} className="text-[#0F0F15]/40 group-hover:text-[#0F0F15]" /></div>
-                    <p className="text-sm text-[#0F0F15]/65">{d}</p>
+          {/* ================= 08 RUÍDO E ONDA ================= */}
+          <Capitulo id="texturas" n="08" titulo="Ruído e onda" lead="A marca não usa texturas de material. Usa duas camadas, ambas monocromáticas: o ruído fino sobre as cores lisas e a onda da calçada como assinatura brasileira.">
+            <h3 className="text-xl font-black uppercase tracking-tight mb-4">Ruído · sobre as cores lisas</h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+              {[
+                ['Preto · sutil', 'bg-[#0F0F15] text-[#D8D4BD]', 0.06, 'claro', 'Padrão em seções escuras'],
+                ['Off-white · sutil', 'bg-[#D8D4BD] text-[#0F0F15]', 0.07, 'escuro', 'Padrão em seções claras'],
+                ['Preto · máximo', 'bg-[#0F0F15] text-[#D8D4BD]', 0.12, 'claro', 'Capas e peças isoladas'],
+                ['Excesso · evitar', 'bg-[#0F0F15] text-[#D8D4BD]', 0.3, 'claro', 'Vira sujeira — não usar'],
+              ].map(([t, cls, op, tom, d], k) => (
+                <div key={t as string} className="rounded-[1.75rem] overflow-hidden border border-[#0F0F15]/10 bg-white">
+                  <div className={`relative h-40 flex items-end p-5 ${cls}`}>
+                    <Ruido opacidade={op as number} tom={tom as string} />
+                    <span className="relative text-sm font-black uppercase">{t as string}</span>
+                    {k === 3 && <span className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white text-[#0F0F15] flex items-center justify-center"><X size={14} /></span>}
                   </div>
-                </a>
+                  <div className="p-4 text-xs"><p className="font-bold">Opacidade {Math.round((op as number) * 100)}%</p><p className="text-[#0F0F15]/60">{d as string}</p></div>
+                </div>
               ))}
             </div>
+            <Cartao className="mb-10">
+              <Rotulinho>Regras do ruído</Rotulinho>
+              <ul className="grid md:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+                {['Só sobre preto e off-white lisos — nunca sobre fotos', 'Grão fino (frequência 0,9), nunca manchas', 'No digital: 6–7%; em peças isoladas, até 12%', 'Seções brancas ficam limpas, sem ruído', 'Na impressão, aplicar como camada de ruído monocromático', 'Se o ruído chama atenção, está forte demais'].map((t) => <li key={t} className="flex gap-3"><Check className="w-4 h-4 shrink-0 mt-0.5" />{t}</li>)}
+              </ul>
+            </Cartao>
+            <h3 className="text-xl font-black uppercase tracking-tight mb-4">Onda · calçada portuguesa</h3>
+            <a href="/img/marca/textura-calcada-ondas.webp" download className="group block rounded-[1.75rem] overflow-hidden border border-[#0F0F15]/10 bg-white">
+              <div className="v2-calcada h-40" />
+              <div className="p-5 flex items-center justify-between">
+                <div><p className="font-black uppercase tracking-tight">Calçada em ondas</p><p className="text-sm text-[#0F0F15]/65">A propagação em pedra — Brasil, ritmo e onda, em preto e marfim. Faixas, rodapés, capas e stories.</p></div>
+                <Download size={16} className="text-[#0F0F15]/40 group-hover:text-[#0F0F15] shrink-0 ml-4" />
+              </div>
+            </a>
           </Capitulo>
 
           {/* ================= 09 ICONOGRAFIA ================= */}
@@ -481,7 +496,7 @@ export default function BrandKit() {
               </Peca>
               {/* Carrossel em kraft */}
               <Peca rotulo="Carrossel · capa">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl p-7 flex flex-col" style={{ backgroundImage: 'url(/img/marca/textura-kraft.webp)', backgroundSize: 'cover' }}>
+                <div className="v2-grao is-claro relative aspect-[4/5] overflow-hidden rounded-2xl p-7 flex flex-col bg-[#D8D4BD]">
                   <p className="v2-rotulo !text-[0.55rem] !text-[#0F0F15]/70 mb-4"><span className="font-mirano">01</span><span className="v2-linha-h"><i /></span>Diagnóstico</p>
                   <p className="text-2xl font-black leading-tight">Sua marca entrega bem, mas parece comum?</p>
                   <div className="relative w-24 h-24 mt-auto ml-auto text-[#0F0F15]/60"><Ondas className="inset-0 w-full" aneis={4} /></div>
@@ -494,11 +509,11 @@ export default function BrandKit() {
               {/* Cartão de visita */}
               <Peca rotulo="Cartão de visita · 90 × 50 mm">
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="relative aspect-[9/5] rounded-xl overflow-hidden bg-[#0F0F15] flex items-center justify-center" style={{ backgroundImage: 'url(/img/marca/textura-escura-pedra.webp)', backgroundSize: '300px' }}>
+                  <div className="v2-grao relative aspect-[9/5] rounded-xl overflow-hidden bg-[#0F0F15] flex items-center justify-center">
                     <Ondas className="w-[140%] left-[60%] top-1/2 -translate-y-1/2 text-[#D8D4BD]/35" aneis={5} />
                     <img src="/SVG/proh-white-off.svg" alt="" className="relative h-7" />
                   </div>
-                  <div className="aspect-[9/5] rounded-xl p-4 flex flex-col justify-between text-[#0F0F15]" style={{ backgroundImage: 'url(/img/marca/textura-papel-off.webp)', backgroundSize: '300px' }}>
+                  <div className="v2-grao is-claro aspect-[9/5] rounded-xl p-4 flex flex-col justify-between text-[#0F0F15] bg-[#D8D4BD]">
                     <div><p className="text-xs font-black uppercase">Nome Sobrenome</p><p className="text-[0.55rem] font-bold uppercase tracking-widest text-[#0F0F15]/60">Cargo</p></div>
                     <div className="text-[0.55rem] font-medium text-[#0F0F15]/75 leading-relaxed">nome@proh.media<br />+55 19 99595-1316<br />proh.media</div>
                     <p className="font-mirano text-[0.45rem] font-bold">PROPAGAR VALOR.</p>
@@ -521,8 +536,8 @@ export default function BrandKit() {
 
             {/* Capa de apresentação 16:9 em terracota */}
             <Peca rotulo="Apresentação · capa 16:9">
-              <div className="relative aspect-video rounded-2xl overflow-hidden text-white p-8 md:p-12 flex flex-col" style={{ backgroundImage: 'url(/img/marca/textura-reboco-terracota.webp)', backgroundSize: 'cover' }}>
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0F0F15]/55 to-transparent" />
+              <div className="v2-grao relative aspect-video rounded-2xl overflow-hidden bg-[#0F0F15] text-white p-8 md:p-12 flex flex-col">
+                <Ondas className="w-[70%] right-[-18%] top-1/2 -translate-y-1/2 text-[#D8D4BD]/30" aneis={7} />
                 <div className="relative flex items-center justify-between">
                   <img src="/SVG/proh-white.svg" alt="" className="h-7" />
                   <span className="v2-etiqueta"><b />Proposta estratégica</span>
@@ -541,7 +556,7 @@ export default function BrandKit() {
               {[
                 ['Logos oficiais (18 SVG)', 'Pasta SVG/ do projeto', '/SVG/proh-black.svg'],
                 ['Fotografias da marca (6)', 'public/img/marca/', '/img/marca/estrategia-equipe-parede.webp'],
-                ['Texturas (5)', 'public/img/marca/', '/img/marca/textura-calcada-ondas.webp'],
+                ['Onda · calçada portuguesa', 'public/img/marca/', '/img/marca/textura-calcada-ondas.webp'],
                 ['Imagens-símbolo v2 (4)', 'public/img/v2/', '/img/v2/praca-ondas-pessoas.webp'],
                 ['Fonte Mirano Extended', 'fonts/ (woff2)', '/fonts/MiranoExtended-Bold.woff2'],
                 ['Fonte Gotham', 'fonts/GOTHAM/ (otf)', '/fonts/GOTHAM/Gotham-Black.otf'],
@@ -622,6 +637,12 @@ function Elemento({ nome, uso, claro = false, children }) {
       <div className="p-6"><p className="font-black uppercase tracking-tight mb-1">{nome}</p><p className="text-sm text-[#0F0F15]/65">{uso}</p></div>
     </div>
   );
+}
+
+function Ruido({ opacidade, tom }) {
+  const cor = tom === 'claro' ? '0 0 0 0 1  0 0 0 0 1  0 0 0 0 1' : '0 0 0 0 0.06  0 0 0 0 0.06  0 0 0 0 0.08';
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='${cor}  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>`;
+  return <span className="absolute inset-0 pointer-events-none" style={{ opacity: opacidade, backgroundImage: `url("data:image/svg+xml;utf8,${svg}")` }} aria-hidden="true" />;
 }
 
 function Peca({ rotulo, children }) {

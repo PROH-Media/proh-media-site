@@ -156,7 +156,11 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
   background: currentColor;
 }
 
-/* ---------- Grão nas superfícies escuras ---------- */
+/* ---------- Ruído: textura monocromática sobre as cores lisas ----------
+   A única textura da marca é o ruído — fino e discreto, sobre preto ou
+   off-white. Nada de texturas de material (papel, pedra, kraft, reboco).
+   .v2-grao        → superfícies escuras (grão claro)
+   .v2-grao.is-claro → superfícies off-white (grão escuro) */
 .v2-grao { position: relative; isolation: isolate; }
 .v2-grao::before {
   content: '';
@@ -164,8 +168,12 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.07;
+  opacity: 0.06;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+}
+.v2-grao.is-claro::before {
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.06  0 0 0 0 0.08  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
 }
 
 /* ---------- Fotografia da marca: cor natural e quente ----------
@@ -183,28 +191,7 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
 .v2-foto-moldura:hover .v2-foto { transform: scale(1.03); }
 .v2-foto-moldura:hover .v2-foto.is-pb { filter: grayscale(0) contrast(1); }
 
-/* ---------- Texturas da marca ---------- */
-/* papel off-white nas superfícies claras */
-.v2-papel {
-  background-color: var(--off);
-  background-image: url('/img/marca/textura-papel-off.webp');
-  background-size: 640px;
-}
-/* pedra nas superfícies escuras */
-.v2-pedra {
-  background-color: var(--preto);
-  background-image: url('/img/marca/textura-escura-pedra.webp');
-  background-size: 560px;
-}
-.v2-kraft {
-  background-image: url('/img/marca/textura-kraft.webp');
-  background-size: cover;
-}
-.v2-terracota {
-  background-color: #C2643A;
-  background-image: url('/img/marca/textura-reboco-terracota.webp');
-  background-size: cover;
-}
+/* ---------- Onda: calçada portuguesa (monocromática) ---------- */
 .v2-calcada {
   background-color: var(--preto);
   background-image: url('/img/marca/textura-calcada-ondas.webp');
