@@ -5,6 +5,7 @@ import {
   Briefcase, UserRound, Landmark, HandHeart, MessageCircle,
 } from 'lucide-react';
 
+import { IconeVivo } from './IconeVivo';
 import logoClaro from '../SVG/proh-black-white.svg';
 import logoEscuro from '../SVG/proh-white-off.svg';
 
@@ -119,7 +120,7 @@ export default function AppV2() {
     <div className="bg-[#D8D4BD] text-[#0F0F15] overflow-x-hidden">
       {/* ================= HEADER ================= */}
       <header className="fixed top-0 left-0 right-0 z-[200] px-4 sm:px-6 md:px-12 pt-4 md:pt-5">
-        <div className={`max-w-7xl mx-auto border overflow-hidden rounded-[2rem] transition-colors duration-500 backdrop-blur-md shadow-md ${headerEscuro ? 'bg-[#0F0F15]/70 border-white/10' : 'bg-[#D8D4BD]/65 border-white/50'}`}>
+        <div className={`v2-vidro max-w-7xl mx-auto overflow-hidden rounded-[2rem] transition-colors duration-500 ${headerEscuro ? 'is-escuro' : ''}`}>
           <div className="flex items-center justify-between gap-4 py-3 px-5 lg:pl-[19px] lg:pr-3">
             <a href="#inicio" onClick={fecharMenu} className="h-[1.9rem] flex items-start shrink-0" aria-label="PROH Media — início">
               <img src={headerEscuro ? logoEscuro : logoClaro} alt="PROH Media" className="h-[131%] w-auto" />
@@ -322,7 +323,7 @@ export default function AppV2() {
 
           <div className="relative grid md:grid-cols-2 gap-5 md:gap-6">
             {/* o eixo que une as duas dimensões: o valor */}
-            <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-24 h-24 rounded-full bg-white border border-[#0F0F15]/10 shadow-xl items-center justify-center" aria-hidden="true">
+            <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-24 h-24 rounded-full v2-vidro items-center justify-center" aria-hidden="true">
               <span className="text-[0.65rem] font-bold uppercase tracking-[0.2em]">Valor</span>
             </div>
 
@@ -370,16 +371,16 @@ export default function AppV2() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
             {[
-              { i: <Compass size={22} strokeWidth={1.6} />, t: 'Estratégia', d: 'Direcionamento para compreender o cenário, organizar objetivos e definir os caminhos da comunicação.', it: ['Diagnóstico', 'Planejamento', 'Posicionamento', 'Proposta de valor'] },
-              { i: <Fingerprint size={22} strokeWidth={1.6} />, t: 'Marca', d: 'Estrutura para transformar essência em uma identidade reconhecível e relevante.', it: ['Naming e branding', 'Identidade visual e verbal', 'Manifesto', 'Brandbook'] },
-              { i: <PenLine size={22} strokeWidth={1.6} />, t: 'Conteúdo', d: 'Narrativas e formatos que constroem presença, relacionamento e autoridade.', it: ['Planejamento editorial', 'Social media', 'Roteiros e campanhas', 'Direção criativa'] },
-              { i: <TrendingUp size={22} strokeWidth={1.6} />, t: 'Mídia e performance', d: 'Distribuição estratégica para aumentar alcance, demanda e conversão.', it: ['Tráfego pago', 'Funis e campanhas', 'Otimização', 'Dados e relatórios'] },
-              { i: <MonitorSmartphone size={22} strokeWidth={1.6} />, t: 'Digital', d: 'Experiências que conectam marca, informação e conversão.', it: ['Sites e landing pages', 'Portais e interfaces', 'Automações', 'Apresentações digitais'] },
-              { i: <HeartHandshake size={22} strokeWidth={1.6} />, t: 'Impacto', d: 'Comunicação para organizações e causas que desejam mobilizar pessoas e demonstrar transformação.', it: ['Campanhas sociais', 'Captação', 'Relatórios de impacto', 'Comunicação institucional'] },
+              { i: 'compass', t: 'Estratégia', d: 'Direcionamento para compreender o cenário, organizar objetivos e definir os caminhos da comunicação.', it: ['Diagnóstico', 'Planejamento', 'Posicionamento', 'Proposta de valor'] },
+              { i: 'fingerprint', t: 'Marca', d: 'Estrutura para transformar essência em uma identidade reconhecível e relevante.', it: ['Naming e branding', 'Identidade visual e verbal', 'Manifesto', 'Brandbook'] },
+              { i: 'pen-line', t: 'Conteúdo', d: 'Narrativas e formatos que constroem presença, relacionamento e autoridade.', it: ['Planejamento editorial', 'Social media', 'Roteiros e campanhas', 'Direção criativa'] },
+              { i: 'trending-up', t: 'Mídia e performance', d: 'Distribuição estratégica para aumentar alcance, demanda e conversão.', it: ['Tráfego pago', 'Funis e campanhas', 'Otimização', 'Dados e relatórios'] },
+              { i: 'monitor-smartphone', t: 'Digital', d: 'Experiências que conectam marca, informação e conversão.', it: ['Sites e landing pages', 'Portais e interfaces', 'Automações', 'Apresentações digitais'] },
+              { i: 'heart-handshake', t: 'Impacto', d: 'Comunicação para organizações e causas que desejam mobilizar pessoas e demonstrar transformação.', it: ['Campanhas sociais', 'Captação', 'Relatórios de impacto', 'Comunicação institucional'] },
             ].map((s, k) => (
               <article key={s.t} className="v2-revela group rounded-[var(--raio)] bg-[#E6E3D3] border border-white/60 p-7 md:p-8 flex flex-col hover:bg-white transition-colors duration-500" style={{ '--atraso': `${(k % 3) * 90}ms` } as React.CSSProperties}>
                 <div className="flex items-center justify-between mb-8">
-                  <span className="v2-icone w-12 h-12 rounded-2xl bg-[#0F0F15] text-[#D8D4BD] flex items-center justify-center">{s.i}</span>
+                  <span className="w-12 h-12 rounded-2xl bg-[#0F0F15] text-[#D8D4BD] flex items-center justify-center"><IconeVivo nome={s.i} /></span>
                   <span className="text-[0.7rem] font-bold tracking-[0.22em] text-[#0F0F15]/40">S—0{k + 1}</span>
                 </div>
                 <h3 className="text-xl font-black uppercase tracking-tight mb-3">{s.t}</h3>
@@ -453,13 +454,13 @@ export default function AppV2() {
           <div className="grid lg:grid-cols-[1.4fr_1fr] gap-5">
             <div className="grid sm:grid-cols-2 gap-5">
               {[
-                [<Briefcase key="a" size={22} strokeWidth={1.6} />, 'Empresas e marcas de serviço', 'Para negócios que precisam aumentar percepção, autoridade e demanda.'],
-                [<UserRound key="b" size={22} strokeWidth={1.6} />, 'Profissionais e lideranças', 'Para especialistas, executivos e fundadores que desejam transformar conhecimento em influência.'],
-                [<Landmark key="c" size={22} strokeWidth={1.6} />, 'Instituições e projetos sociais', 'Para organizações que precisam mobilizar pessoas, captar recursos e demonstrar impacto.'],
-                [<HandHeart key="d" size={22} strokeWidth={1.6} />, 'Empresas com responsabilidade social', 'Para marcas que desejam comunicar ações e compromissos com credibilidade.'],
+                ['briefcase', 'Empresas e marcas de serviço', 'Para negócios que precisam aumentar percepção, autoridade e demanda.'],
+                ['user-round', 'Profissionais e lideranças', 'Para especialistas, executivos e fundadores que desejam transformar conhecimento em influência.'],
+                ['landmark', 'Instituições e projetos sociais', 'Para organizações que precisam mobilizar pessoas, captar recursos e demonstrar impacto.'],
+                ['hand-heart', 'Empresas com responsabilidade social', 'Para marcas que desejam comunicar ações e compromissos com credibilidade.'],
               ].map(([i, t, d], k) => (
                 <div key={t as string} className="v2-revela group rounded-[var(--raio)] bg-[#E6E3D3] border border-white/60 p-7 flex flex-col gap-4 hover:bg-white transition-colors duration-500" style={{ '--atraso': `${(k % 2) * 90}ms` } as React.CSSProperties}>
-                  <span className="v2-icone w-11 h-11 rounded-full border border-[#0F0F15]/20 flex items-center justify-center">{i}</span>
+                  <span className="w-11 h-11 rounded-full border border-[#0F0F15]/20 flex items-center justify-center"><IconeVivo nome={i as string} /></span>
                   <h3 className="text-lg font-black uppercase tracking-tight">{t}</h3>
                   <p className="text-[#0F0F15]/70 leading-relaxed">{d}</p>
                 </div>

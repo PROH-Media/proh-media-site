@@ -137,17 +137,19 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  background: rgba(15, 15, 21, 0.72);
+  background: linear-gradient(140deg, rgba(26, 26, 33, 0.58), rgba(15, 15, 21, 0.42));
   color: var(--off);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(216, 212, 189, 0.18);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(216, 212, 189, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
   white-space: nowrap;
 }
 .v2-etiqueta.is-clara {
-  background: rgba(255, 255, 255, 0.75);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.38));
   color: var(--preto);
-  border-color: rgba(15, 15, 21, 0.08);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 .v2-etiqueta > b {
   width: 0.4rem;
@@ -223,30 +225,142 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
 .v2-fade-in { animation: v2-fade-in 0.5s ease-out both; }
 .v2-fade-out { animation: v2-fade-out 0.35s ease-in both; }
 
-/* ---------- Ícones vivos ----------
-   Uma onda sai do ícone quando ele entra na tela (uma vez) e se repete,
-   num ritmo calmo, enquanto o mouse está sobre o cartão. O próprio ícone
-   inclina levemente. No celular, a onda de entrada mostra que ele existe. */
-.v2-icone { position: relative; isolation: isolate; }
-.v2-icone::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 1.5px solid currentColor;
-  opacity: 0;
-  pointer-events: none;
+/* ---------- Ícones vivos (v2/IconeVivo.tsx) ----------
+   O desenho se move pelo que significa — nada é aplicado por fora.
+   Toca uma vez (classe .is-animando, posta ao aparecer e a cada vez que o
+   mouse entra no cartão). Rotações e escalas giram em torno de pontos do
+   próprio desenho (coordenadas do viewBox 24×24). */
+.iv * { transform-box: view-box; }
+.iv.is-animando [pathLength] { stroke-dasharray: 1; }
+@keyframes iv-desenha { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+/* bússola: a agulha procura o norte e assenta */
+.iv.is-animando .iv-agulha { transform-origin: 12px 12px; animation: iv-agulha 1.4s var(--curva) both; }
+@keyframes iv-agulha { 0% { transform: rotate(0); } 30% { transform: rotate(-55deg); } 55% { transform: rotate(28deg); } 75% { transform: rotate(-10deg); } 100% { transform: rotate(0); } }
+
+/* digital: as linhas são lidas uma a uma */
+.iv.is-animando .iv-traco { animation: iv-desenha 0.7s var(--curva) both; animation-delay: calc(var(--i) * 70ms); }
+
+/* caneta: escreve a linha */
+.iv.is-animando .iv-linha { animation: iv-desenha 0.9s var(--curva) 0.15s both; }
+.iv.is-animando .iv-caneta { animation: iv-caneta 1.1s var(--curva) both; }
+@keyframes iv-caneta { 0% { transform: translate(-7px, 1px); } 25% { transform: translate(-5px, -0.6px); } 45% { transform: translate(-3px, 0.6px); } 65% { transform: translate(-1px, -0.4px); } 100% { transform: translate(0, 0); } }
+
+/* crescimento: a linha sobe e a seta chega */
+.iv.is-animando .iv-grafico { animation: iv-desenha 0.8s var(--curva) both; }
+.iv.is-animando .iv-seta { transform-origin: 22px 7px; animation: iv-surge 0.45s var(--curva) 0.55s both; }
+@keyframes iv-surge { from { opacity: 0; transform: translate(-2px, 2px) scale(0.6); } to { opacity: 1; transform: none; } }
+
+/* monitor: o celular encaixa ao lado da tela */
+.iv.is-animando .iv-celular { animation: iv-celular 0.9s var(--curva) both; }
+@keyframes iv-celular { 0% { opacity: 0; transform: translate(3px, 4px); } 70% { opacity: 1; transform: translate(0, -0.6px); } 100% { transform: none; } }
+
+/* aperto de mão: as mãos sobem e descem cumprimentando; o coração bate */
+.iv.is-animando .iv-maos { transform-origin: 15px 11px; animation: iv-aperto 1.3s ease-in-out both; }
+@keyframes iv-aperto {
+  0% { transform: none; }
+  15% { transform: translateY(-1.4px) rotate(-4deg); }
+  32% { transform: translateY(1.2px) rotate(3deg); }
+  49% { transform: translateY(-1.1px) rotate(-3deg); }
+  66% { transform: translateY(0.9px) rotate(2deg); }
+  83% { transform: translateY(-0.3px); }
+  100% { transform: none; }
 }
-.v2-icone > svg { transition: transform 0.5s var(--curva); }
-.v2-revela.is-visivel .v2-icone::after,
-.v2-icone.is-visivel::after { animation: v2-icone-onda 1.4s ease-out 0.5s 1; }
-.group:hover .v2-icone::after,
-.v2-icone:hover::after { animation: v2-icone-onda 1.6s ease-out infinite; }
-.group:hover .v2-icone > svg,
-.v2-icone:hover > svg { transform: rotate(-8deg) scale(1.1); }
-@keyframes v2-icone-onda {
-  0%   { transform: scale(1); opacity: 0.55; }
-  100% { transform: scale(1.75); opacity: 0; }
+.iv.is-animando .iv-coracao { transform-origin: 12px 12px; animation: iv-bate 0.6s ease-out 1.05s both; }
+@keyframes iv-bate { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.07); } }
+
+/* maleta: erguida pela alça, balança e assenta */
+.iv.is-animando .iv-maleta { transform-origin: 12px 2px; animation: iv-maleta 1.2s var(--curva) both; }
+@keyframes iv-maleta { 0% { transform: none; } 25% { transform: translateY(-2px) rotate(-6deg); } 50% { transform: translateY(-2px) rotate(5deg); } 72% { transform: translateY(-1px) rotate(-2deg); } 100% { transform: none; } }
+
+/* pessoa: acena com a cabeça */
+.iv.is-animando .iv-cabeca { transform-origin: 12px 12px; animation: iv-aceno 1.1s ease-in-out both; }
+@keyframes iv-aceno { 0%, 100% { transform: none; } 22% { transform: translateY(1.3px) rotate(4deg); } 45% { transform: none; } 68% { transform: translateY(1px) rotate(3deg); } }
+
+/* instituição: as colunas se erguem e o frontão assenta */
+.iv.is-animando .iv-coluna { transform-origin: 0 18px; animation: iv-ergue 0.55s var(--curva) both; animation-delay: calc(var(--i) * 90ms); }
+@keyframes iv-ergue { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.iv.is-animando .iv-fronte { animation: iv-assenta 0.5s var(--curva) 0.5s both; }
+@keyframes iv-assenta { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+
+/* mão e coração: o coração sobe da mão e bate */
+.iv.is-animando.iv-hand-heart .iv-coracao { transform-origin: 16px 8px; animation: iv-oferece 1.2s var(--curva) both; }
+@keyframes iv-oferece { 0% { transform: translateY(3px) scale(0.85); opacity: 0.4; } 55% { transform: translateY(-1px) scale(1); opacity: 1; } 75% { transform: translateY(-1px) scale(1.09); } 100% { transform: none; } }
+.iv.is-animando .iv-mao { animation: iv-mao 1.2s var(--curva) both; }
+@keyframes iv-mao { 0% { transform: translateY(1px); } 55% { transform: translateY(-0.5px); } 100% { transform: none; } }
+
+/* mensagem: alguém está digitando */
+.iv-ponto { opacity: 0; }
+.iv.is-animando .iv-ponto { animation: iv-digita 1.4s ease-in-out both; animation-delay: calc(var(--i) * 140ms); }
+@keyframes iv-digita { 0% { opacity: 0; transform: none; } 20% { opacity: 1; transform: translateY(-1px); } 40% { transform: none; } 60% { transform: translateY(-1px); } 80% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+
+/* brilho: cintila */
+.iv.is-animando .iv-estrela { transform-origin: 12px 12px; animation: iv-cintila 1s var(--curva) both; }
+@keyframes iv-cintila { 0% { transform: none; } 35% { transform: scale(0.82) rotate(-12deg); } 70% { transform: scale(1.08) rotate(6deg); } 100% { transform: none; } }
+.iv.is-animando .iv-brilho { animation: iv-pisca 0.9s ease-out both; animation-delay: calc(0.25s + var(--i) * 0.2s); }
+@keyframes iv-pisca { 0% { opacity: 1; } 30% { opacity: 0.1; } 60% { opacity: 1; } 100% { opacity: 1; } }
+
+/* pessoas: a segunda pessoa chega */
+.iv.is-animando .iv-segundo { animation: iv-chega 0.9s var(--curva) both; }
+@keyframes iv-chega { from { opacity: 0; transform: translateX(-4px); } to { opacity: 1; transform: none; } }
+.iv.is-animando .iv-primeiro { transform-origin: 9px 21px; animation: iv-acolhe 0.9s ease-in-out 0.35s both; }
+@keyframes iv-acolhe { 0%, 100% { transform: none; } 50% { transform: rotate(-4deg); } }
+
+/* alvo: o centro é atingido */
+.iv.is-animando .iv-centro { transform-origin: 12px 12px; animation: iv-acerta 0.8s var(--curva) both; }
+@keyframes iv-acerta { 0% { transform: scale(0); } 60% { transform: scale(1.5); } 100% { transform: scale(1); } }
+.iv.is-animando .iv-anel { transform-origin: 12px 12px; animation: iv-bate 0.6s ease-out 0.35s both; }
+
+/* megafone: vibra ao anunciar */
+.iv.is-animando .iv-megafone { animation: iv-vibra 0.9s linear both; }
+@keyframes iv-vibra { 0%, 100% { transform: none; } 10%, 30%, 50%, 70% { transform: translateX(-0.6px) rotate(-1.5deg); } 20%, 40%, 60%, 80% { transform: translateX(0.6px) rotate(1.5deg); } }
+.iv.is-animando .iv-boca { transform-origin: 3px 12px; animation: iv-boca 0.9s ease-out both; }
+@keyframes iv-boca { 0%, 100% { transform: none; } 50% { transform: scale(1.06); } }
+
+/* gráfico: as barras crescem */
+.iv.is-animando .iv-barra { transform-origin: 0 17px; animation: iv-ergue 0.6s var(--curva) both; animation-delay: calc(var(--i) * 110ms); }
+
+/* lâmpada: acende */
+.iv-raios { opacity: 0; }
+.iv.is-animando .iv-raios { animation: iv-acende 1.3s ease-out both; }
+@keyframes iv-acende { 0% { opacity: 0; } 25% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; } }
+.iv.is-animando .iv-bulbo { animation: iv-luz 1.3s ease-out both; }
+@keyframes iv-luz { 0%, 100% { fill: transparent; } 25%, 70% { fill: currentColor; fill-opacity: 0.18; } }
+
+/* camadas: se separam e voltam ao lugar */
+.iv.is-animando .iv-camada { animation: iv-separa 1.1s var(--curva) both; }
+.iv.is-animando .iv-camada[style*="--i: 1"] { animation-name: iv-separa-meio; }
+@keyframes iv-separa { 0%, 100% { transform: none; } 45% { transform: translateY(-2.6px); } }
+@keyframes iv-separa-meio { 0%, 100% { transform: none; } 45% { transform: translateY(-1.2px); } }
+
+/* envelope: a aba abre e fecha */
+.iv.is-animando .iv-aba { transform-origin: 12px 7px; animation: iv-aba 1.2s var(--curva) both; }
+@keyframes iv-aba { 0%, 100% { transform: none; } 40%, 60% { transform: scaleY(-0.55); } }
+
+/* globo: o meridiano gira */
+.iv.is-animando .iv-meridiano { transform-origin: 12px 12px; animation: iv-gira 1.4s ease-in-out both; }
+@keyframes iv-gira { 0%, 100% { transform: scaleX(1); } 25% { transform: scaleX(0.15); } 50% { transform: scaleX(-1); } 75% { transform: scaleX(0.15); } }
+
+/* ---------- Vidro líquido ----------
+   Discreto: translúcido, desfoque e um brilho fino na borda de cima.
+   Sem distorção, sem arco-íris, sem movimento. */
+.v2-vidro {
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.46), rgba(216, 212, 189, 0.30));
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 30px rgba(15, 15, 21, 0.10);
+}
+.v2-vidro.is-escuro {
+  background: linear-gradient(140deg, rgba(26, 26, 33, 0.62), rgba(15, 15, 21, 0.48));
+  border-color: rgba(216, 212, 189, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 /* ---------- Pilha de cartas (assinatura da v1, consolidada) ---------- */
@@ -317,7 +431,8 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .v2-revela { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
-  .v2-icone::after, .v2-fade-in, .v2-fade-out, .v2-entrada { animation: none !important; }
+  .v2-fade-in, .v2-fade-out, .v2-entrada, .iv * { animation: none !important; }
+  .iv [pathLength] { stroke-dasharray: none !important; }
   .v2-ondas.is-animado .v2-onda {
     animation: none !important;
     opacity: calc(0.55 - var(--i) * 0.08) !important;

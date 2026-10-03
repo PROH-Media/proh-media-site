@@ -5,6 +5,7 @@ import {
   MessageCircle, Sparkles, Mail, Globe, Users, Target, Megaphone, BarChart3, Lightbulb, Layers,
 } from 'lucide-react';
 import { Proh, Ondas, Rede, Direcao, Subida } from '../v2/AppV2';
+import { IconeVivo, ICONES_VIVOS } from '../v2/IconeVivo';
 
 // ==========================================================================
 // DADOS DA MARCA
@@ -78,11 +79,7 @@ export default function BrandKit() {
   useEffect(() => {
     const obs = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && setAtivo(e.target.id)), { rootMargin: '-30% 0px -60% 0px' });
     CAPITULOS.forEach(([id]) => { const el = document.getElementById(id); if (el) obs.observe(el); });
-    const obsIcones = new IntersectionObserver((es) => es.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add('is-visivel'); obsIcones.unobserve(e.target); }
-    }), { threshold: 0.6 });
-    document.querySelectorAll('.v2-icone').forEach((el) => obsIcones.observe(el));
-    return () => { obs.disconnect(); obsIcones.disconnect(); };
+    return () => obs.disconnect();
   }, []);
 
   return (
@@ -385,6 +382,13 @@ export default function BrandKit() {
                   <div><p className="text-[0.6rem] font-bold uppercase tracking-widest text-white mb-2">Valor percebido</p><div className="relative h-2"><div className="absolute inset-0 rounded-full border border-dashed border-[#D8D4BD]/40" /><div className="absolute left-0 top-0 h-2 w-[42%] rounded-full bg-[#D8D4BD]/45" /></div></div>
                 </div>
               </Elemento>
+              <Elemento nome="Vidro líquido" uso="Material discreto para o que flutua: menu, etiquetas sobre fotos, selos. Translúcido, desfoque e brilho fino na borda — sem distorção, arco-íris ou movimento.">
+                <img src="/img/v2/praca-ondas-pessoas.webp" alt="" className="absolute inset-0 w-full h-full object-cover" />
+                <div className="relative flex flex-col items-center gap-3">
+                  <span className="v2-vidro rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0F0F15]">Menu em vidro</span>
+                  <span className="v2-vidro is-escuro rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#D8D4BD]">Etiqueta escura</span>
+                </div>
+              </Elemento>
               <Elemento nome="Cartas sobrepostas" uso="Seções que deslizam umas sobre as outras com topo arredondado (40–48 px)." claro>
                 <div className="relative w-48 h-32">
                   <div className="absolute inset-x-0 top-0 h-20 rounded-t-[1.25rem] bg-[#0F0F15]" />
@@ -513,8 +517,8 @@ export default function BrandKit() {
               <Demo titulo="Faixa contínua" spec="76 s por volta · linear · sem emenda" escuro>
                 {() => <div className="w-full overflow-hidden"><div className="v2-faixa">{[0, 1].map((t) => <div key={t} className="v2-faixa-trilho" style={{ animationDuration: '24s' }}>{['Propagar valor.', 'Propagar ideias.', 'Propagar impacto.'].map((x) => <span key={x} className="font-mirano text-xs font-bold uppercase tracking-[0.2em] text-white whitespace-nowrap mx-6">{x}</span>)}</div>)}</div></div>}
               </Demo>
-              <Demo titulo="Ícone vivo" spec="Onda ao entrar na tela (1×) · repete com o mouse em cima">
-                {(k) => <div key={k} className="group flex gap-4"><span className="v2-icone is-visivel w-14 h-14 rounded-2xl bg-[#0F0F15] text-[#D8D4BD] flex items-center justify-center"><Compass size={22} strokeWidth={1.6} /></span><span className="v2-icone is-visivel w-14 h-14 rounded-full border border-[#0F0F15]/25 flex items-center justify-center"><Users size={22} strokeWidth={1.6} /></span></div>}
+              <Demo titulo="Ícone vivo" spec="O desenho se move pelo significado · 1× ao aparecer e a cada entrada do mouse">
+                {(k) => <div key={k} className="group flex gap-4"><span className="w-14 h-14 rounded-2xl bg-[#0F0F15] text-[#D8D4BD] flex items-center justify-center"><IconeVivo nome="heart-handshake" /></span><span className="w-14 h-14 rounded-full border border-[#0F0F15]/25 flex items-center justify-center"><IconeVivo nome="compass" /></span></div>}
               </Demo>
               <Demo titulo="Foto ao passar o mouse" spec="Aproxima 3% · 1,2 s · nunca troca a cor">
                 {() => <div className="v2-foto-moldura w-44 h-28 rounded-2xl"><img src="/img/marca/estrategia-equipe-parede.webp" alt="" className="v2-foto" /></div>}
@@ -539,16 +543,17 @@ export default function BrandKit() {
           </Capitulo>
 
           {/* ================= 11 ICONOGRAFIA ================= */}
-          <Capitulo id="icones" n="11" titulo="Iconografia" lead="Linha fina (1,6), cantos arredondados, sempre dentro de um contêiner da marca. Família Lucide — e vivos: uma onda sai de cada ícone quando ele aparece, e se repete com o mouse em cima.">
+          <Capitulo id="icones" n="11" titulo="Iconografia" lead="Linha fina (1,6), cantos arredondados, sempre dentro de um contêiner da marca. Família Lucide — e vivos: cada ícone se move pelo que significa, uma vez quando aparece e de novo quando o mouse passa.">
             <Cartao>
-              <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-5">
-                {[Compass, Fingerprint, PenLine, TrendingUp, MonitorSmartphone, HeartHandshake, Briefcase, UserRound, Landmark, HandHeart, MessageCircle, Sparkles, Users, Target, Megaphone, BarChart3, Lightbulb, Layers, Mail, Globe].map((I, k) => (
-                  <div key={k} className="group flex flex-col items-center gap-2 cursor-default">
-                    <span className={`v2-icone w-14 h-14 flex items-center justify-center ${k % 3 === 0 ? 'rounded-2xl bg-[#0F0F15] text-[#D8D4BD]' : k % 3 === 1 ? 'rounded-full border border-[#0F0F15]/25' : 'rounded-2xl bg-[#E6E3D3]'}`}><I size={22} strokeWidth={1.6} /></span>
+              <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-7 gap-x-4 gap-y-7">
+                {ICONES_VIVOS.map((nome, k) => (
+                  <div key={nome} className="group flex flex-col items-center gap-2 cursor-default">
+                    <span className={`w-14 h-14 flex items-center justify-center transition-colors duration-300 ${k % 3 === 0 ? 'rounded-2xl bg-[#0F0F15] text-[#D8D4BD]' : k % 3 === 1 ? 'rounded-full border border-[#0F0F15]/25 group-hover:bg-white' : 'rounded-2xl bg-[#E6E3D3] group-hover:bg-white'}`}><IconeVivo nome={nome} /></span>
+                    <span className="text-[0.6rem] font-bold uppercase tracking-wider text-[#0F0F15]/45 text-center">{nome.replace(/-/g, ' ')}</span>
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-[#0F0F15]/65 mt-6">Três contêineres: quadrado preto (serviços), círculo com contorno (públicos), quadrado claro (apoio). Ícone nunca sozinho como decoração.</p>
+              <p className="text-sm text-[#0F0F15]/65 mt-7">Passe o mouse para ver cada movimento. Três contêineres: quadrado preto (serviços), círculo com contorno (públicos), quadrado claro (apoio). O movimento nasce do desenho — as mãos se cumprimentam, a agulha procura o norte — nunca um efeito aplicado por fora.</p>
             </Cartao>
           </Capitulo>
 
