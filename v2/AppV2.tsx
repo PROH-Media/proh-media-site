@@ -273,8 +273,8 @@ export default function AppV2() {
 
           <div className="grid md:grid-cols-3 gap-5 md:gap-6 mb-12">
             <div className="v2-revela v2-foto-moldura rounded-[var(--raio)] shadow-xl min-h-[17rem]">
-              <img src="/img/multidao-destaque.jpg" alt="Vista aérea de uma multidão em movimento com algumas pessoas paradas em destaque" className="v2-foto absolute inset-0" loading="lazy" />
-              <span className="v2-etiqueta absolute left-4 bottom-4"><b />Pessoas em destaque</span>
+              <img src="/img/marca/criacao-conteudo.webp" alt="Dupla sorridente produz conteúdo: ele filma uma peça de cerâmica com o celular enquanto ela ajusta a luz" className="v2-foto absolute inset-0" style={{ objectPosition: '40% 50%' }} loading="lazy" />
+              <span className="v2-etiqueta absolute left-4 bottom-4"><b />Pessoas no centro</span>
             </div>
 
             {/* PRO: direção — uma trajetória que sobe */}
@@ -379,7 +379,7 @@ export default function AppV2() {
             ].map((s, k) => (
               <article key={s.t} className="v2-revela group rounded-[var(--raio)] bg-[#E6E3D3] border border-white/60 p-7 md:p-8 flex flex-col hover:bg-white transition-colors duration-500" style={{ '--atraso': `${(k % 3) * 90}ms` } as React.CSSProperties}>
                 <div className="flex items-center justify-between mb-8">
-                  <span className="w-12 h-12 rounded-2xl bg-[#0F0F15] text-[#D8D4BD] flex items-center justify-center">{s.i}</span>
+                  <span className="v2-icone w-12 h-12 rounded-2xl bg-[#0F0F15] text-[#D8D4BD] flex items-center justify-center">{s.i}</span>
                   <span className="text-[0.7rem] font-bold tracking-[0.22em] text-[#0F0F15]/40">S—0{k + 1}</span>
                 </div>
                 <h3 className="text-xl font-black uppercase tracking-tight mb-3">{s.t}</h3>
@@ -458,8 +458,8 @@ export default function AppV2() {
                 [<Landmark key="c" size={22} strokeWidth={1.6} />, 'Instituições e projetos sociais', 'Para organizações que precisam mobilizar pessoas, captar recursos e demonstrar impacto.'],
                 [<HandHeart key="d" size={22} strokeWidth={1.6} />, 'Empresas com responsabilidade social', 'Para marcas que desejam comunicar ações e compromissos com credibilidade.'],
               ].map(([i, t, d], k) => (
-                <div key={t as string} className="v2-revela rounded-[var(--raio)] bg-[#E6E3D3] border border-white/60 p-7 flex flex-col gap-4" style={{ '--atraso': `${(k % 2) * 90}ms` } as React.CSSProperties}>
-                  <span className="w-11 h-11 rounded-full border border-[#0F0F15]/20 flex items-center justify-center">{i}</span>
+                <div key={t as string} className="v2-revela group rounded-[var(--raio)] bg-[#E6E3D3] border border-white/60 p-7 flex flex-col gap-4 hover:bg-white transition-colors duration-500" style={{ '--atraso': `${(k % 2) * 90}ms` } as React.CSSProperties}>
+                  <span className="v2-icone w-11 h-11 rounded-full border border-[#0F0F15]/20 flex items-center justify-center">{i}</span>
                   <h3 className="text-lg font-black uppercase tracking-tight">{t}</h3>
                   <p className="text-[#0F0F15]/70 leading-relaxed">{d}</p>
                 </div>
@@ -794,12 +794,12 @@ function Metodo() {
         <ol className="border-t border-[#D8D4BD]/12">
           {METODO.map((m, k) => (
             <li key={m.titulo} className={`border-b border-[#D8D4BD]/12 ${passo === k ? 'is-ativo' : ''}`}>
-              <button type="button" onClick={() => escolher(k)} onMouseEnter={() => escolher(k)} className="w-full flex items-center gap-5 py-4 text-left" aria-expanded={passo === k}>
+              <button type="button" onClick={() => escolher(k)} onMouseEnter={() => escolher(k)} className="w-full flex items-center gap-5 pt-4 pb-2 text-left" aria-current={passo === k ? 'step' : undefined}>
                 <span className={`font-mirano text-sm w-8 transition-colors ${passo === k ? 'text-white' : 'text-[#D8D4BD]/40'}`}>0{k + 1}</span>
                 <span className={`text-lg md:text-xl font-black uppercase tracking-tight transition-colors ${passo === k ? 'text-white' : 'text-[#D8D4BD]/55'}`}>{m.titulo}</span>
                 <span className={`ml-auto h-px transition-all duration-500 ${passo === k ? 'w-16 bg-white' : 'w-6 bg-[#D8D4BD]/25'}`} aria-hidden="true" />
               </button>
-              <div className="v2-passo-texto"><div><p className="pb-5 pl-[3.25rem] text-[#D8D4BD]/75 leading-relaxed max-w-md">{m.texto}</p></div></div>
+              <p className={`pb-4 pl-[3.25rem] leading-relaxed max-w-md transition-colors duration-500 ${passo === k ? 'text-[#D8D4BD]/90' : 'text-[#D8D4BD]/50'}`}>{m.texto}</p>
             </li>
           ))}
         </ol>

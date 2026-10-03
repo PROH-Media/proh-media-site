@@ -177,19 +177,18 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
 }
 
 /* ---------- Fotografia da marca: cor natural e quente ----------
-   Padrão: cor natural, com um leve ajuste quente para todas as fotos
-   conversarem entre si. P&B virou recurso editorial pontual (.is-pb). */
+   Pessoas alegres, cor natural — nunca preto e branco. O filtro é o
+   equivalente web da LUT "PROH Natural" (brandkit/lut): calor leve,
+   contraste suave e saturação contida, para todas as fotos conversarem. */
 .v2-foto {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.92) contrast(1.03) sepia(0.06);
-  transition: filter 0.6s ease, transform 1.2s var(--curva);
+  filter: sepia(0.06) saturate(0.95) contrast(1.04);
+  transition: transform 1.2s var(--curva);
 }
-.v2-foto.is-pb { filter: grayscale(1) contrast(1.04); }
 .v2-foto-moldura { overflow: hidden; position: relative; }
 .v2-foto-moldura:hover .v2-foto { transform: scale(1.03); }
-.v2-foto-moldura:hover .v2-foto.is-pb { filter: grayscale(0) contrast(1); }
 
 /* ---------- Onda: calçada portuguesa (monocromática) ---------- */
 .v2-calcada {
@@ -198,14 +197,57 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
   background-size: 420px;
 }
 
-/* ---------- Revelação no scroll ---------- */
+/* ---------- MOVIMENTO ----------
+   Princípio: a animação acompanha a leitura, nunca a substitui.
+   · Entrada: uma vez só, curta (0,8s), com desfoque — nada se repete ao
+     rolar de volta, e nenhuma informação depende de clique ou hover.
+   · Repetição: só em elementos decorativos, lenta e constante
+     (ondas 12–18s, respiração 4s, faixa 76s).
+   · Estado (menu, abas, respostas): fade in 0,5s / fade out 0,35s. */
 .v2-revela {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.9s ease-out, transform 0.9s var(--curva);
+  transform: translateY(20px);
+  filter: blur(8px);
+  transition: opacity 0.8s ease-out, transform 0.8s var(--curva), filter 0.8s ease-out;
   transition-delay: var(--atraso, 0ms);
 }
-.v2-revela.is-visivel { opacity: 1; transform: none; }
+.v2-revela.is-visivel { opacity: 1; transform: none; filter: none; }
+
+@keyframes v2-fade-in { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: blur(0); } }
+@keyframes v2-fade-out { from { opacity: 1; filter: blur(0); } to { opacity: 0; filter: blur(6px); } }
+@keyframes v2-entrada {
+  from { opacity: 0; transform: translateY(20px); filter: blur(8px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+.v2-entrada { animation: v2-entrada 0.8s var(--curva) both; }
+.v2-fade-in { animation: v2-fade-in 0.5s ease-out both; }
+.v2-fade-out { animation: v2-fade-out 0.35s ease-in both; }
+
+/* ---------- Ícones vivos ----------
+   Uma onda sai do ícone quando ele entra na tela (uma vez) e se repete,
+   num ritmo calmo, enquanto o mouse está sobre o cartão. O próprio ícone
+   inclina levemente. No celular, a onda de entrada mostra que ele existe. */
+.v2-icone { position: relative; isolation: isolate; }
+.v2-icone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid currentColor;
+  opacity: 0;
+  pointer-events: none;
+}
+.v2-icone > svg { transition: transform 0.5s var(--curva); }
+.v2-revela.is-visivel .v2-icone::after,
+.v2-icone.is-visivel::after { animation: v2-icone-onda 1.4s ease-out 0.5s 1; }
+.group:hover .v2-icone::after,
+.v2-icone:hover::after { animation: v2-icone-onda 1.6s ease-out infinite; }
+.group:hover .v2-icone > svg,
+.v2-icone:hover > svg { transform: rotate(-8deg) scale(1.1); }
+@keyframes v2-icone-onda {
+  0%   { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
 
 /* ---------- Pilha de cartas (assinatura da v1, consolidada) ---------- */
 .v2-carta {
@@ -244,14 +286,6 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
   0%   { transform: scale(0.1); opacity: 0.7; }
   100% { transform: scale(1); opacity: 0; }
 }
-.v2-passo-texto {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.5s var(--curva), opacity 0.5s var(--curva);
-  opacity: 0;
-}
-.v2-passo-texto > div { overflow: hidden; }
-.is-ativo > .v2-passo-texto { grid-template-rows: 1fr; opacity: 1; }
 
 /* ---------- Diagrama da distância ---------- */
 .v2-barra {
@@ -282,7 +316,8 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
 /* ---------- Acessibilidade: menos movimento ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .v2-revela { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .v2-revela { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
+  .v2-icone::after, .v2-fade-in, .v2-fade-out, .v2-entrada { animation: none !important; }
   .v2-ondas.is-animado .v2-onda {
     animation: none !important;
     opacity: calc(0.55 - var(--i) * 0.08) !important;

@@ -12,7 +12,8 @@ import { Proh, Ondas, Rede, Direcao, Subida } from '../v2/AppV2';
 const CAPITULOS = [
   ['essencia', 'Essência'], ['voz', 'Tom de voz'], ['logo', 'Logo'], ['cores', 'Cores'],
   ['tipografia', 'Tipografia'], ['elementos', 'Elementos gráficos'], ['fotografia', 'Fotografia'],
-  ['texturas', 'Ruído e onda'], ['icones', 'Iconografia'], ['aplicacoes', 'Aplicações'], ['downloads', 'Downloads'],
+  ['tratamento', 'Tratamento e LUT'], ['texturas', 'Ruído e onda'], ['movimento', 'Movimento'],
+  ['icones', 'Iconografia'], ['aplicacoes', 'Aplicações'], ['downloads', 'Downloads'],
 ];
 
 const CORES = [
@@ -61,6 +62,15 @@ const FOTOS = [
 
 
 
+const LUTS = [
+  { id: 'PROH-Natural', nome: 'PROH Natural', uso: 'Padrão para todas as fotos da marca.', css: 'sepia(0.06) saturate(0.95) contrast(1.04)',
+    ajustes: ['Temperatura +2,5% (vermelho) / −4,5% (azul)', 'Curva S suave (12%)', 'Saturação 94%', 'Pretos levantados com o tom do preto da marca', 'Altas luzes puxadas para o off-white (15%)'] },
+  { id: 'PROH-Dourado', nome: 'PROH Dourado', uso: 'Externas, fim de tarde, impacto e comunidade.', css: 'sepia(0.16) saturate(1.04) contrast(1.05) brightness(1.02)',
+    ajustes: ['Temperatura +6% (vermelho) / −12% (azul)', 'Curva S (15%)', 'Saturação 102%', 'Pretos quentes', 'Altas luzes douradas (22%)'] },
+  { id: 'PROH-Suave', nome: 'PROH Suave', uso: 'Retratos, pele, entrevistas e depoimentos.', css: 'sepia(0.05) saturate(0.88) contrast(0.94) brightness(1.03)',
+    ajustes: ['Temperatura +2% / −3%', 'Contraste baixo (5%)', 'Saturação 90%', 'Pretos mais abertos', 'Altas luzes suaves (20%)'] },
+];
+
 // ==========================================================================
 export default function BrandKit() {
   const [ativo, setAtivo] = useState('essencia');
@@ -68,7 +78,11 @@ export default function BrandKit() {
   useEffect(() => {
     const obs = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && setAtivo(e.target.id)), { rootMargin: '-30% 0px -60% 0px' });
     CAPITULOS.forEach(([id]) => { const el = document.getElementById(id); if (el) obs.observe(el); });
-    return () => obs.disconnect();
+    const obsIcones = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('is-visivel'); obsIcones.unobserve(e.target); }
+    }), { threshold: 0.6 });
+    document.querySelectorAll('.v2-icone').forEach((el) => obsIcones.observe(el));
+    return () => { obs.disconnect(); obsIcones.disconnect(); };
   }, []);
 
   return (
@@ -382,7 +396,7 @@ export default function BrandKit() {
           </Capitulo>
 
           {/* ================= 07 FOTOGRAFIA ================= */}
-          <Capitulo id="fotografia" n="07" titulo="Fotografia" lead="Gente de verdade, em cor natural e quente. Realista, humana e brasileira — o valor das pessoas aparece antes de qualquer efeito.">
+          <Capitulo id="fotografia" n="07" titulo="Fotografia" lead="Gente de verdade e alegre, em cor natural e quente. Realista, humana e brasileira — nunca em preto e branco.">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               {FOTOS.map(([arq, t, d], k) => (
                 <figure key={arq} className={`group relative rounded-[1.5rem] overflow-hidden ${k === 5 ? 'row-span-2' : ''} ${k === 0 ? 'col-span-2 md:col-span-2' : ''}`}>
@@ -397,28 +411,44 @@ export default function BrandKit() {
               <Cartao>
                 <Rotulinho>Direção</Rotulinho>
                 <ul className="space-y-3">
-                  {['Pessoas reais, de idades, corpos e tons de pele diversos', 'Momentos espontâneos: conversa, trabalho, riso, concentração', 'Luz natural, de preferência janela ou fim de tarde', 'Cor natural e quente: barro, madeira, linho, plantas', 'Contexto brasileiro sem clichê: ateliês, bairros, escritórios vivos', 'Dignidade sempre — protagonistas, nunca vítimas'].map((t) => <li key={t} className="flex gap-3"><Check className="w-5 h-5 shrink-0 mt-0.5" />{t}</li>)}
+                  {['Pessoas alegres: riso, leveza e entusiasmo genuínos', 'Pessoas reais, de idades, corpos e tons de pele diversos', 'Momentos espontâneos: conversa, trabalho, riso, concentração', 'Luz natural, de preferência janela ou fim de tarde', 'Cor natural e quente: barro, madeira, linho, plantas', 'Contexto brasileiro sem clichê: ateliês, bairros, escritórios vivos', 'Dignidade sempre — protagonistas, nunca vítimas'].map((t) => <li key={t} className="flex gap-3"><Check className="w-5 h-5 shrink-0 mt-0.5" />{t}</li>)}
                 </ul>
               </Cartao>
               <Cartao escuro>
                 <Rotulinho escuro>Evitar</Rotulinho>
                 <ul className="space-y-3">
-                  {['Banco de imagem posado (aperto de mão, sorriso para a câmera sem contexto)', 'Filtros saturados, tons frios ou artificiais', 'Sofrimento como apelo em causas sociais', 'Símbolos políticos, religiosos ou marcas de terceiros', 'Fotos genéricas que poderiam ser de qualquer agência'].map((t) => <li key={t} className="flex gap-3"><X className="w-5 h-5 shrink-0 mt-0.5 text-white" />{t}</li>)}
+                  {['Preto e branco — nunca, em nenhuma peça', 'Pessoas tristes, tensas ou entediadas', 'Banco de imagem posado (aperto de mão, sorriso para a câmera sem contexto)', 'Filtros saturados, tons frios ou artificiais', 'Sofrimento como apelo em causas sociais', 'Símbolos políticos, religiosos ou marcas de terceiros', 'Fotos genéricas que poderiam ser de qualquer agência'].map((t) => <li key={t} className="flex gap-3"><X className="w-5 h-5 shrink-0 mt-0.5 text-white" />{t}</li>)}
                 </ul>
               </Cartao>
             </div>
+            <p className="text-sm text-[#0F0F15]/65">O tratamento de cor de todas as fotos está no próximo capítulo — LUTs da marca.</p>
+          </Capitulo>
+
+          {/* ================= 08 TRATAMENTO E LUT ================= */}
+          <Capitulo id="tratamento" n="08" titulo="Tratamento e LUT" lead="Um tom só para todas as fotos da marca: natural, quente e leve. Três LUTs prontas para Lightroom, Photoshop, Premiere, DaVinci e CapCut — e o equivalente em CSS para a web.">
+            <ComparadorLUT />
+            <div className="grid md:grid-cols-3 gap-5 mt-5 mb-5">
+              {LUTS.map((l) => (
+                <Cartao key={l.id}>
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <div><p className="text-xl font-black uppercase tracking-tight">{l.nome}</p><p className="text-sm text-[#0F0F15]/65">{l.uso}</p></div>
+                    <a href={`/brandkit/lut/${l.id}.cube`} download className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#0F0F15] text-[#D8D4BD] text-xs font-bold uppercase tracking-wider hover:bg-black"><Download size={14} />.cube</a>
+                  </div>
+                  <ul className="space-y-1.5 text-sm mb-5">{l.ajustes.map((a) => <li key={a} className="flex gap-2"><span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#0F0F15]/50 shrink-0" />{a}</li>)}</ul>
+                  <CopiarCodigo rotulo="CSS (web)" codigo={`filter: ${l.css};`} />
+                </Cartao>
+              ))}
+            </div>
             <Cartao>
-              <Rotulinho>Tratamento</Rotulinho>
-              <div className="grid md:grid-cols-3 gap-5 items-center">
-                <figure><img src="/img/marca/empreendedora-atelie.webp" alt="" className="h-40 w-full object-cover rounded-2xl" loading="lazy" /><figcaption className="text-xs font-bold mt-2">Padrão · cor natural quente</figcaption></figure>
-                <figure><img src="/img/marca/empreendedora-atelie.webp" alt="" className="h-40 w-full object-cover rounded-2xl grayscale" loading="lazy" /><figcaption className="text-xs font-bold mt-2">Pontual · P&B editorial (manifesto, contraste)</figcaption></figure>
-                <p className="text-sm text-[#0F0F15]/70">A cor natural é o padrão. O preto e branco vira recurso editorial — usado de propósito, em uma peça ou seção, nunca como regra para todas as fotos.</p>
+              <Rotulinho>Como aplicar</Rotulinho>
+              <div className="grid md:grid-cols-2 gap-x-10 gap-y-3 text-sm">
+                {['Acerte exposição e balanço de branco antes — a LUT é acabamento, não correção', 'Intensidade entre 60% e 100%; pele sempre natural', 'Uma LUT por série: todas as fotos de uma peça com o mesmo tratamento', 'Nunca preto e branco; nunca filtros de aplicativo por cima', 'Na web, prefira exportar a foto já tratada; o CSS é aproximação', 'Arquivos .cube de 33 pontos, padrão Adobe e Resolve'].map((t) => <p key={t} className="flex gap-3"><Check className="w-4 h-4 shrink-0 mt-0.5" />{t}</p>)}
               </div>
             </Cartao>
           </Capitulo>
 
-          {/* ================= 08 RUÍDO E ONDA ================= */}
-          <Capitulo id="texturas" n="08" titulo="Ruído e onda" lead="A marca não usa texturas de material. Usa duas camadas, ambas monocromáticas: o ruído fino sobre as cores lisas e a onda da calçada como assinatura brasileira.">
+          {/* ================= 09 RUÍDO E ONDA ================= */}
+          <Capitulo id="texturas" n="09" titulo="Ruído e onda" lead="A marca não usa texturas de material. Usa duas camadas, ambas monocromáticas: o ruído fino sobre as cores lisas e a onda da calçada como assinatura brasileira.">
             <h3 className="text-xl font-black uppercase tracking-tight mb-4">Ruído · sobre as cores lisas</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
               {[
@@ -453,13 +483,68 @@ export default function BrandKit() {
             </a>
           </Capitulo>
 
-          {/* ================= 09 ICONOGRAFIA ================= */}
-          <Capitulo id="icones" n="09" titulo="Iconografia" lead="Linha fina (1,6), cantos arredondados, sempre dentro de um contêiner da marca. Família Lucide.">
+          {/* ================= 10 MOVIMENTO ================= */}
+          <Capitulo id="movimento" n="10" titulo="Movimento" lead="A animação acompanha a leitura — nunca a substitui. Entradas curtas e únicas, repetição lenta só no que é decorativo, e nenhuma informação escondida atrás de clique, hover ou espera.">
+            <div className="grid md:grid-cols-3 gap-5 mb-5">
+              {[
+                ['A informação não espera', 'Tudo que importa aparece na rolagem. Ninguém precisa clicar, repousar o mouse ou assistir a uma animação para ler.'],
+                ['Uma vez só', 'A entrada acontece na primeira vez. Ao voltar a rolagem, o conteúdo já está lá — nada se repete para quem já viu.'],
+                ['Frequente, nunca forçado', 'O que se repete é decorativo e calmo: ondas, respiração e a faixa de mensagens, sempre no mesmo ritmo.'],
+              ].map(([t, d]) => (
+                <Cartao key={t}><p className="text-lg font-black uppercase tracking-tight mb-2">{t}</p><p className="text-sm text-[#0F0F15]/70">{d}</p></Cartao>
+              ))}
+            </div>
+            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
+              <Demo titulo="Entrada" spec="0,8 s · desfoque 8 px → 0 · sobe 20 px · curva PROH">
+                {(k) => <div key={k} className="v2-entrada w-40 rounded-2xl bg-white p-4 shadow-lg"><div className="h-2 w-16 rounded-full bg-[#0F0F15] mb-3" /><div className="h-2 w-full rounded-full bg-[#0F0F15]/20 mb-2" /><div className="h-2 w-3/4 rounded-full bg-[#0F0F15]/20" /></div>}
+              </Demo>
+              <Demo titulo="Cascata" spec="Mesma entrada · +90 ms entre itens">
+                {(k) => <div key={k} className="w-40 space-y-2">{[0, 1, 2, 3].map((i) => <div key={i} className="v2-entrada h-6 rounded-full bg-white shadow" style={{ animationDelay: `${i * 90}ms`, width: `${100 - i * 15}%` }} />)}</div>}
+              </Demo>
+              <Demo titulo="Fade in · fade out" spec="Entra 0,5 s ease-out · sai 0,35 s ease-in · com desfoque" alternar>
+                {(k, aberto) => <div className={`${aberto ? 'v2-fade-in' : 'v2-fade-out'} rounded-2xl bg-[#0F0F15] text-[#D8D4BD] px-5 py-4 text-sm font-bold`}>Resposta aparece</div>}
+              </Demo>
+              <Demo titulo="Onda contínua" spec="Ciclo 12–18 s · linear · só decorativo" escuro>
+                {() => <div className="relative w-36 h-36 text-[#D8D4BD]"><Ondas className="inset-0 w-full" aneis={6} animado dur={12} /><span className="v2-origem" style={{ left: '50%', top: '50%' }} /></div>}
+              </Demo>
+              <Demo titulo="Respiração" spec="Ciclo 4 s · ease-in-out · pontos de origem e centros">
+                {() => <Rede className="w-40 h-28" />}
+              </Demo>
+              <Demo titulo="Faixa contínua" spec="76 s por volta · linear · sem emenda" escuro>
+                {() => <div className="w-full overflow-hidden"><div className="v2-faixa">{[0, 1].map((t) => <div key={t} className="v2-faixa-trilho" style={{ animationDuration: '24s' }}>{['Propagar valor.', 'Propagar ideias.', 'Propagar impacto.'].map((x) => <span key={x} className="font-mirano text-xs font-bold uppercase tracking-[0.2em] text-white whitespace-nowrap mx-6">{x}</span>)}</div>)}</div></div>}
+              </Demo>
+              <Demo titulo="Ícone vivo" spec="Onda ao entrar na tela (1×) · repete com o mouse em cima">
+                {(k) => <div key={k} className="group flex gap-4"><span className="v2-icone is-visivel w-14 h-14 rounded-2xl bg-[#0F0F15] text-[#D8D4BD] flex items-center justify-center"><Compass size={22} strokeWidth={1.6} /></span><span className="v2-icone is-visivel w-14 h-14 rounded-full border border-[#0F0F15]/25 flex items-center justify-center"><Users size={22} strokeWidth={1.6} /></span></div>}
+              </Demo>
+              <Demo titulo="Foto ao passar o mouse" spec="Aproxima 3% · 1,2 s · nunca troca a cor">
+                {() => <div className="v2-foto-moldura w-44 h-28 rounded-2xl"><img src="/img/marca/estrategia-equipe-parede.webp" alt="" className="v2-foto" /></div>}
+              </Demo>
+            </div>
+            <Cartao>
+              <Rotulinho>Tempos e curvas</Rotulinho>
+              <div className="divide-y divide-[#0F0F15]/10 text-sm">
+                {[
+                  ['Saída / fade out', '0,35 s', 'ease-in', 'Menus, respostas, trocas de estado'],
+                  ['Fade in de estado', '0,5 s', 'ease-out', 'Abrir menu, mostrar resposta'],
+                  ['Entrada no scroll', '0,8 s', 'cubic-bezier(0.45, 0, 0.55, 1)', 'Títulos, cartões, fotos — uma vez'],
+                  ['Cascata', '+80 a 120 ms', '—', 'Grupos de cartões e listas'],
+                  ['Transição grande', '1,2 a 2 s', 'cubic-bezier(0.45, 0, 0.55, 1)', 'Fotos, abertura, recolhimentos'],
+                  ['Ciclos', '4 s · 12–18 s · 76 s', 'ease-in-out / linear', 'Respiração · ondas · faixa'],
+                ].map(([a, b, c, d]) => (
+                  <div key={a} className="grid grid-cols-2 md:grid-cols-[1.2fr_0.8fr_1.4fr_1.6fr] gap-2 py-3"><b>{a}</b><span>{b}</span><code className="text-xs text-[#0F0F15]/70">{c}</code><span className="text-[#0F0F15]/65">{d}</span></div>
+                ))}
+              </div>
+              <p className="text-xs text-[#0F0F15]/55 mt-4">Quem ativa “reduzir movimento” no sistema vê tudo estático e imediato.</p>
+            </Cartao>
+          </Capitulo>
+
+          {/* ================= 11 ICONOGRAFIA ================= */}
+          <Capitulo id="icones" n="11" titulo="Iconografia" lead="Linha fina (1,6), cantos arredondados, sempre dentro de um contêiner da marca. Família Lucide — e vivos: uma onda sai de cada ícone quando ele aparece, e se repete com o mouse em cima.">
             <Cartao>
               <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-5">
                 {[Compass, Fingerprint, PenLine, TrendingUp, MonitorSmartphone, HeartHandshake, Briefcase, UserRound, Landmark, HandHeart, MessageCircle, Sparkles, Users, Target, Megaphone, BarChart3, Lightbulb, Layers, Mail, Globe].map((I, k) => (
-                  <div key={k} className="flex flex-col items-center gap-2">
-                    <span className={`w-14 h-14 flex items-center justify-center ${k % 3 === 0 ? 'rounded-2xl bg-[#0F0F15] text-[#D8D4BD]' : k % 3 === 1 ? 'rounded-full border border-[#0F0F15]/25' : 'rounded-2xl bg-[#E6E3D3]'}`}><I size={22} strokeWidth={1.6} /></span>
+                  <div key={k} className="group flex flex-col items-center gap-2 cursor-default">
+                    <span className={`v2-icone w-14 h-14 flex items-center justify-center ${k % 3 === 0 ? 'rounded-2xl bg-[#0F0F15] text-[#D8D4BD]' : k % 3 === 1 ? 'rounded-full border border-[#0F0F15]/25' : 'rounded-2xl bg-[#E6E3D3]'}`}><I size={22} strokeWidth={1.6} /></span>
                   </div>
                 ))}
               </div>
@@ -468,7 +553,7 @@ export default function BrandKit() {
           </Capitulo>
 
           {/* ================= 10 APLICAÇÕES ================= */}
-          <Capitulo id="aplicacoes" n="10" titulo="Aplicações" lead="O sistema em uso: redes sociais, papelaria e apresentações. Modelos prontos para servir de referência.">
+          <Capitulo id="aplicacoes" n="12" titulo="Aplicações" lead="O sistema em uso: redes sociais, papelaria e apresentações. Modelos prontos para servir de referência.">
             <div className="grid md:grid-cols-[1fr_0.62fr_1fr] gap-5 items-start mb-5">
               {/* Post de feed 4:5 */}
               <Peca rotulo="Post · feed 4:5">
@@ -551,13 +636,16 @@ export default function BrandKit() {
           </Capitulo>
 
           {/* ================= 11 DOWNLOADS ================= */}
-          <Capitulo id="downloads" n="11" titulo="Downloads" lead="Arquivos-fonte do sistema. As fontes são licenciadas: instale a partir dos arquivos oficiais do projeto.">
+          <Capitulo id="downloads" n="13" titulo="Downloads" lead="Arquivos-fonte do sistema. As fontes são licenciadas: instale a partir dos arquivos oficiais do projeto.">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 ['Logos oficiais (18 SVG)', 'Pasta SVG/ do projeto', '/SVG/proh-black.svg'],
                 ['Fotografias da marca (6)', 'public/img/marca/', '/img/marca/estrategia-equipe-parede.webp'],
                 ['Onda · calçada portuguesa', 'public/img/marca/', '/img/marca/textura-calcada-ondas.webp'],
                 ['Imagens-símbolo v2 (4)', 'public/img/v2/', '/img/v2/praca-ondas-pessoas.webp'],
+                ['LUT PROH Natural (.cube)', 'brandkit/lut/', '/brandkit/lut/PROH-Natural.cube'],
+                ['LUT PROH Dourado (.cube)', 'brandkit/lut/', '/brandkit/lut/PROH-Dourado.cube'],
+                ['LUT PROH Suave (.cube)', 'brandkit/lut/', '/brandkit/lut/PROH-Suave.cube'],
                 ['Fonte Mirano Extended', 'fonts/ (woff2)', '/fonts/MiranoExtended-Bold.woff2'],
                 ['Fonte Gotham', 'fonts/GOTHAM/ (otf)', '/fonts/GOTHAM/Gotham-Black.otf'],
               ].map(([t, d, h]) => (
@@ -635,6 +723,69 @@ function Elemento({ nome, uso, claro = false, children }) {
     <div className="rounded-[2rem] overflow-hidden border border-[#0F0F15]/10 bg-white">
       <div className={`h-52 flex items-center justify-center relative overflow-hidden ${claro ? 'bg-[#E6E3D3] text-[#0F0F15]' : 'v2-grao bg-[#0F0F15] text-[#D8D4BD]'}`}>{children}</div>
       <div className="p-6"><p className="font-black uppercase tracking-tight mb-1">{nome}</p><p className="text-sm text-[#0F0F15]/65">{uso}</p></div>
+    </div>
+  );
+}
+
+// Antes/depois da LUT: abre na metade, para os dois lados já estarem à vista.
+function ComparadorLUT() {
+  const [lut, setLut] = useState(LUTS[0].id);
+  const [pos, setPos] = useState(50);
+  const nome = LUTS.find((l) => l.id === lut)?.nome;
+  return (
+    <div className="rounded-[2rem] bg-white/70 border border-white p-4 md:p-5">
+      <div className="relative aspect-[3/2] rounded-2xl overflow-hidden select-none">
+        <img src="/brandkit/lut/previa-original.webp" alt="Foto original" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={`/brandkit/lut/previa-${lut}.webp`} alt={`Foto com ${nome}`} className="absolute inset-0 w-full h-full object-cover" style={{ clipPath: `inset(0 0 0 ${pos}%)` }} />
+        <div className="absolute top-0 bottom-0 w-0.5 bg-white shadow-[0_0_12px_rgba(0,0,0,0.4)] pointer-events-none" style={{ left: `${pos}%` }}>
+          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white text-[#0F0F15] shadow-lg flex items-center justify-center text-xs font-black">⟷</span>
+        </div>
+        <span className="v2-etiqueta absolute left-4 top-4">Original</span>
+        <span className="v2-etiqueta is-clara absolute right-4 top-4"><b />{nome}</span>
+        <input type="range" min={0} max={100} value={pos} onChange={(e) => setPos(Number(e.target.value))} aria-label="Comparar original e tratada" className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize" />
+      </div>
+      <div className="flex flex-wrap gap-2 mt-4">
+        {LUTS.map((l) => (
+          <button key={l.id} type="button" onClick={() => setLut(l.id)} className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${lut === l.id ? 'bg-[#0F0F15] text-[#D8D4BD]' : 'bg-[#E6E3D3] hover:bg-white'}`}>{l.nome}</button>
+        ))}
+        <span className="ml-auto self-center text-xs text-[#0F0F15]/55">Arraste para comparar</span>
+      </div>
+    </div>
+  );
+}
+
+function CopiarCodigo({ rotulo, codigo }) {
+  const [ok, setOk] = useState(false);
+  return (
+    <button type="button" onClick={() => navigator.clipboard?.writeText(codigo).then(() => { setOk(true); setTimeout(() => setOk(false), 1400); }).catch(() => {})} className="w-full text-left rounded-xl bg-[#0F0F15] text-[#D8D4BD] p-3 group">
+      <span className="flex items-center justify-between text-[0.6rem] font-bold uppercase tracking-[0.2em] text-[#D8D4BD]/55 mb-1">{rotulo}<span className="flex items-center gap-1">{ok ? <><Check size={12} />copiado</> : <><Copy size={12} />copiar</>}</span></span>
+      <code className="text-[0.7rem] leading-relaxed break-all">{codigo}</code>
+    </button>
+  );
+}
+
+// Demonstração de movimento: repete só enquanto está visível, com pausa
+// entre as repetições; o botão "Rever" reinicia na hora.
+function Demo({ titulo, spec, escuro = false, alternar = false, children }) {
+  const ref = React.useRef(null);
+  const [chave, setChave] = useState(0);
+  const [aberto, setAberto] = useState(true);
+  useEffect(() => {
+    let t = null;
+    const obs = new IntersectionObserver(([e]) => {
+      clearInterval(t);
+      if (e.isIntersecting) t = setInterval(() => { if (alternar) setAberto((v) => !v); else setChave((c) => c + 1); }, alternar ? 1800 : 3800);
+    }, { threshold: 0.4 });
+    if (ref.current) obs.observe(ref.current);
+    return () => { clearInterval(t); obs.disconnect(); };
+  }, [alternar]);
+  return (
+    <div ref={ref} className="rounded-[2rem] overflow-hidden border border-[#0F0F15]/10 bg-white flex flex-col">
+      <div className={`relative h-48 flex items-center justify-center overflow-hidden px-6 ${escuro ? 'v2-grao bg-[#0F0F15]' : 'bg-[#E6E3D3]'}`}>{children(chave, aberto)}</div>
+      <div className="p-5 flex items-start justify-between gap-3">
+        <div><p className="font-black uppercase tracking-tight">{titulo}</p><p className="text-xs text-[#0F0F15]/60 mt-1">{spec}</p></div>
+        {!alternar && <button type="button" onClick={() => setChave((c) => c + 1)} className="shrink-0 text-[0.65rem] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border border-[#0F0F15]/20 hover:bg-[#0F0F15] hover:text-[#D8D4BD] transition-colors">Rever</button>}
+      </div>
     </div>
   );
 }
