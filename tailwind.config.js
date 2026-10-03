@@ -4,6 +4,7 @@ export default {
     './index.html',
     './landing_page_proh.tsx',
     './v2/**/*.{html,ts,tsx}',
+    './brandkit/**/*.{html,ts,tsx}',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {

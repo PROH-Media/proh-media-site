@@ -152,7 +152,7 @@ export default function AppV2() {
       </header>
 
       {/* ================= HERO ================= */}
-      <section id="inicio" data-tema="claro" className="v2-carta is-primeira z-[10] bg-[#D8D4BD] min-h-screen flex flex-col justify-center pt-28 md:pt-32 pb-36">
+      <section id="inicio" data-tema="claro" className="v2-carta is-primeira z-[10] bg-[#D8D4BD] v2-papel min-h-screen flex flex-col justify-center pt-28 md:pt-32 pb-36">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid lg:grid-cols-[1.08fr_0.92fr] gap-12 lg:gap-16 items-center">
           <div>
             <p className="v2-rotulo v2-revela mb-7"><span className="v2-linha-h" aria-hidden="true"><i /></span>Agência estratégica de marca, mídia e impacto</p>
@@ -201,7 +201,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 01 CONCEITO ================= */}
-      <section id="conceito" data-tema="escuro" className="v2-carta v2-grao v2-sombra-escura z-[20] bg-[#0F0F15] text-[#D8D4BD] md:min-h-screen flex flex-col justify-center py-24">
+      <section id="conceito" data-tema="escuro" className="v2-carta v2-pedra v2-sombra-escura z-[20] bg-[#0F0F15] text-[#D8D4BD] md:min-h-screen flex flex-col justify-center py-24">
         <Ondas className="w-[70rem] -right-[30rem] -top-[24rem] text-[#D8D4BD] opacity-[0.12]" aneis={7} />
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-12 md:gap-16 items-center relative">
           <div className="v2-revela">
@@ -222,8 +222,14 @@ export default function AppV2() {
             </ul>
           </div>
 
-          {/* Diagrama: a distância entre o valor real e o valor percebido */}
-          <div className="v2-revela rounded-[var(--raio)] bg-[#1A1A21] border border-[#D8D4BD]/12 p-8 sm:p-10 md:p-12 shadow-[0_8px_40px_rgba(0,0,0,0.35)]" style={{ '--atraso': '150ms' } as React.CSSProperties}>
+          {/* Diagrama: a distância entre o valor real e o valor percebido,
+              ancorado numa pessoa real que faz bem e merece ser vista */}
+          <div className="v2-revela flex flex-col gap-5" style={{ '--atraso': '150ms' } as React.CSSProperties}>
+          <figure className="v2-foto-moldura relative rounded-[var(--raio)] h-56 md:h-64 shadow-2xl">
+            <img src="/img/marca/empreendedora-atelie.webp" alt="Ceramista sorri enquanto organiza peças feitas à mão nas prateleiras do seu ateliê" className="v2-foto absolute inset-0" style={{ objectPosition: '50% 35%' }} loading="lazy" />
+            <span className="v2-etiqueta absolute left-4 top-4"><b />Valor real</span>
+          </figure>
+          <div className="rounded-[var(--raio)] bg-[#1A1A21] border border-[#D8D4BD]/12 p-8 sm:p-10 md:p-12 shadow-[0_8px_40px_rgba(0,0,0,0.35)]">
             <p className="v2-rotulo is-escuro mb-8">Diagnóstico</p>
             <div className="space-y-6 mb-10">
               <div>
@@ -251,11 +257,12 @@ export default function AppV2() {
             </p>
             <p className="font-mirano text-lg md:text-xl font-bold text-white leading-snug">PROH é o nome.<br />Propagar é a missão.</p>
           </div>
+          </div>
         </div>
       </section>
 
       {/* ================= 02 SIGNIFICADO ================= */}
-      <section id="significado" data-tema="claro" className="v2-carta v2-sombra-clara z-[30] bg-[#D8D4BD] md:min-h-screen flex flex-col justify-center py-24">
+      <section id="significado" data-tema="claro" className="v2-carta v2-sombra-clara z-[30] bg-[#D8D4BD] v2-papel md:min-h-screen flex flex-col justify-center py-24">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12 md:mb-14">
             <Rotulo n="02">O significado</Rotulo>
@@ -321,8 +328,8 @@ export default function AppV2() {
 
             <Dimensao
               claro
-              foto="/img/cocriacao-em-equipe.jpg"
-              alt="Equipe diversa reunida em volta de uma mesa cocriando um projeto"
+              foto="/img/marca/estrategia-equipe-parede.webp"
+              alt="Equipe diversa diante de uma parede de referências; uma estrategista aponta uma imagem e os colegas riem"
               rotulo="Valor de negócio"
               titulo="Propagar crescimento"
               intro="Organizamos marcas e campanhas para gerar:"
@@ -331,8 +338,8 @@ export default function AppV2() {
               grafico={<Subida className="w-16 h-10" />}
             />
             <Dimensao
-              foto="/img/comunidade-horizonte-cidade.jpg"
-              alt="Grupo de pessoas abraçadas de costas contemplando a cidade ao entardecer"
+              foto="/img/marca/projeto-social-horta.webp"
+              alt="Vizinhos de várias idades plantam juntos numa horta comunitária; uma avó ensina duas crianças"
               rotulo="Valor humano"
               titulo="Propagar impacto"
               intro="Construímos comunicação capaz de gerar:"
@@ -351,7 +358,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 04 SOLUÇÕES ================= */}
-      <section id="solucoes" data-tema="claro" className="v2-carta v2-sombra-clara z-[50] bg-[#D8D4BD] py-24 md:py-28">
+      <section id="solucoes" data-tema="claro" className="v2-carta v2-sombra-clara z-[50] bg-[#D8D4BD] v2-papel py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12 md:mb-14">
             <Rotulo n="04">Soluções</Rotulo>
@@ -389,7 +396,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 05 MÉTODO ================= */}
-      <section id="metodo" data-tema="escuro" className="v2-carta v2-grao v2-sombra-escura z-[60] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-28">
+      <section id="metodo" data-tema="escuro" className="v2-carta v2-pedra v2-sombra-escura z-[60] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <Metodo />
         </div>
@@ -435,7 +442,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 07 PARA QUEM ================= */}
-      <section id="publicos" data-tema="claro" className="v2-carta v2-sombra-clara z-[80] bg-[#D8D4BD] py-24 md:py-28">
+      <section id="publicos" data-tema="claro" className="v2-carta v2-sombra-clara z-[80] bg-[#D8D4BD] v2-papel py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12">
             <Rotulo n="07">Para quem</Rotulo>
@@ -458,7 +465,12 @@ export default function AppV2() {
                 </div>
               ))}
             </div>
-            <div className="v2-revela v2-grao rounded-[var(--raio)] bg-[#0F0F15] text-[#D8D4BD] p-8 md:p-10 flex flex-col" style={{ '--atraso': '150ms' } as React.CSSProperties}>
+            <div className="v2-revela v2-pedra rounded-[var(--raio)] text-[#D8D4BD] overflow-hidden flex flex-col" style={{ '--atraso': '150ms' } as React.CSSProperties}>
+              <figure className="v2-foto-moldura relative h-64">
+                <img src="/img/marca/retrato-lideranca.webp" alt="Retrato de uma líder de olhar sereno e confiante em um escritório com plantas" className="v2-foto absolute inset-0" style={{ objectPosition: '50% 22%' }} loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F0F15] via-transparent to-transparent" />
+              </figure>
+              <div className="p-8 md:p-10 pt-2">
               <p className="v2-rotulo is-escuro mb-6">Perfil</p>
               <h3 className="text-xl font-bold text-white mb-7">A <Proh /> é para quem:</h3>
               <ul className="space-y-4">
@@ -466,13 +478,14 @@ export default function AppV2() {
                   <li key={t} className="flex items-start gap-3"><Check className="w-5 h-5 mt-0.5 text-white shrink-0" /><span>{t}</span></li>
                 ))}
               </ul>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ================= 08 IMPACTO ================= */}
-      <section id="impacto" data-tema="escuro" className="v2-carta v2-grao v2-sombra-escura z-[90] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-28">
+      <section id="impacto" data-tema="escuro" className="v2-carta v2-pedra v2-sombra-escura z-[90] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="v2-revela">
             <Rotulo n="08" escuro>Impacto</Rotulo>
@@ -503,8 +516,8 @@ export default function AppV2() {
               <img src="/img/v2/voz-comunidade.webp" alt="Mulher fala para um círculo de vizinhos de várias idades em um centro comunitário iluminado pelo fim de tarde" className="v2-foto absolute inset-0" loading="lazy" />
               <span className="v2-etiqueta absolute left-4 top-4"><b />Voz · comunidade</span>
             </figure>
-            <div className="rounded-[var(--raio)] border border-[#D8D4BD]/15 bg-white/[0.04] p-8 md:p-10 flex items-center gap-6">
-              <span className="v2-linha-h is-grande text-[#D8D4BD]/60 hidden sm:inline-flex" aria-hidden="true"><i /></span>
+            <div className="v2-terracota rounded-[var(--raio)] p-8 md:p-10 flex items-center gap-6 shadow-2xl">
+              <span className="v2-linha-h is-grande text-white/80 hidden sm:inline-flex" aria-hidden="true"><i /></span>
               <p className="text-2xl md:text-3xl font-black text-white leading-snug">Causas relevantes também merecem marcas fortes.</p>
             </div>
           </div>
@@ -512,7 +525,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 09 MODELOS ================= */}
-      <section id="modelos" data-tema="claro" className="v2-carta v2-sombra-clara z-[100] bg-[#D8D4BD] py-24 md:py-28">
+      <section id="modelos" data-tema="claro" className="v2-carta v2-sombra-clara z-[100] bg-[#D8D4BD] v2-papel py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12">
             <Rotulo n="09">Modelos de parceria</Rotulo>
@@ -527,11 +540,11 @@ export default function AppV2() {
               ['Sprint de propagação', 'Para objetivos concentrados e períodos específicos.', ['Lançamentos', 'Eventos', 'Campanhas', 'Captação']],
               ['Consultoria e direção', 'Para equipes internas que precisam de orientação.', ['Planejamento', 'Governança de marca', 'Processos', 'Direção de fornecedores']],
             ].map(([t, d, it], k) => (
-              <div key={t as string} className="v2-revela rounded-[var(--raio)] bg-[#E6E3D3] border border-white/60 p-7 flex flex-col" style={{ '--atraso': `${k * 80}ms` } as React.CSSProperties}>
+              <div key={t as string} className="v2-revela v2-kraft rounded-[var(--raio)] p-7 flex flex-col shadow-lg" style={{ '--atraso': `${k * 80}ms` } as React.CSSProperties}>
                 <div className="relative w-10 h-10 mb-7 text-[#0F0F15]"><Ondas className="inset-0 w-full" aneis={k + 2} /></div>
                 <h3 className="text-lg font-black uppercase tracking-tight mb-3">{t as string}</h3>
-                <p className="text-[#0F0F15]/70 leading-relaxed mb-6">{d as string}</p>
-                <ul className="mt-auto space-y-2 border-t border-[#0F0F15]/12 pt-5">
+                <p className="text-[#0F0F15]/80 leading-relaxed mb-6">{d as string}</p>
+                <ul className="mt-auto space-y-2 border-t border-[#0F0F15]/20 pt-5">
                   {(it as string[]).map((x) => <li key={x} className="flex items-center gap-2 text-sm font-medium"><span className="w-1.5 h-1.5 rounded-full bg-[#0F0F15]/60" />{x}</li>)}
                 </ul>
               </div>
@@ -546,7 +559,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 10 MANIFESTO ================= */}
-      <section id="manifesto" data-tema="escuro" className="v2-carta v2-grao v2-sombra-escura z-[110] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-32">
+      <section id="manifesto" data-tema="escuro" className="v2-carta v2-pedra v2-sombra-escura z-[110] bg-[#0F0F15] text-[#D8D4BD] py-24 md:py-32">
         {/* a gota no centro e os anéis: a imagem-símbolo da propagação */}
         <img src="/img/v2/ondas-propagacao.webp" alt="" aria-hidden="true" loading="lazy" className="absolute right-[-10%] top-1/2 -translate-y-1/2 w-[80rem] max-w-none opacity-30 pointer-events-none" style={{ WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 30%, transparent 68%)', maskImage: 'radial-gradient(circle at 50% 50%, black 30%, transparent 68%)' }} />
         <div className="relative max-w-7xl w-full mx-auto px-6 md:px-12 grid md:grid-cols-[1.1fr_1fr] gap-12 md:gap-20 items-start">
@@ -596,7 +609,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 12 CONTATO ================= */}
-      <section id="contato" data-tema="claro" className="v2-carta v2-sombra-clara z-[130] bg-[#D8D4BD] py-24 md:py-28">
+      <section id="contato" data-tema="claro" className="v2-carta v2-sombra-clara z-[130] bg-[#D8D4BD] v2-papel py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <div className="v2-revela lg:sticky lg:top-28">
             <Rotulo n="12">Contato</Rotulo>
@@ -610,17 +623,18 @@ export default function AppV2() {
               ou causa — a <Proh /> entrará em contato para compreender o momento e indicar
               o melhor caminho.
             </p>
-            <div className="hidden lg:block relative w-40 h-40 text-[#0F0F15]/40" aria-hidden="true">
-              <Ondas className="inset-0 w-full" aneis={5} animado dur={10} />
-              <span className="v2-origem !bg-[#0F0F15] !shadow-[0_0_0_6px_rgba(15,15,21,0.12)]" style={{ left: '50%', top: '50%' }} />
-            </div>
+            <figure className="v2-foto-moldura relative rounded-[var(--raio)] h-60 md:h-72 shadow-xl">
+              <img src="/img/marca/conversa-cliente.webp" alt="Estrategista anota enquanto um empresário explica seu negócio, rindo, numa mesa de café" className="v2-foto absolute inset-0" loading="lazy" />
+              <span className="v2-etiqueta absolute left-4 bottom-4"><b />Tudo começa com uma conversa</span>
+            </figure>
           </div>
           <div className="v2-revela" style={{ '--atraso': '150ms' } as React.CSSProperties}><Formulario /></div>
         </div>
       </section>
 
       {/* ================= RODAPÉ ================= */}
-      <footer className="v2-grao relative z-[140] bg-[#0F0F15] text-[#D8D4BD] pt-20 pb-12 overflow-hidden rounded-t-[var(--raio-secao)] -mt-[var(--raio-secao)] shadow-[0_-20px_50px_rgba(0,0,0,0.45)]">
+      <footer className="v2-pedra relative z-[140] text-[#D8D4BD] pb-12 overflow-hidden rounded-t-[var(--raio-secao)] -mt-[var(--raio-secao)] shadow-[0_-20px_50px_rgba(0,0,0,0.45)]">
+        <div className="v2-calcada h-16 md:h-20 mb-16" aria-hidden="true" />
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-12 mb-14">
             <div>
@@ -656,11 +670,11 @@ export default function AppV2() {
 // ELEMENTOS DO SISTEMA VISUAL
 // ==========================================================================
 
-function Proh() {
+export function Proh() {
   return <span className="font-mirano">PROH</span>;
 }
 
-function Rotulo({ n, escuro = false, children }: { n: string; escuro?: boolean; children: React.ReactNode }) {
+export function Rotulo({ n, escuro = false, children }: { n: string; escuro?: boolean; children: React.ReactNode }) {
   return (
     <p className={`v2-rotulo ${escuro ? 'is-escuro' : ''}`}>
       <span className="font-mirano">{n}</span>
@@ -671,7 +685,7 @@ function Rotulo({ n, escuro = false, children }: { n: string; escuro?: boolean; 
 }
 
 // Ondas de propagação: anéis concêntricos (estáticos ou se espalhando).
-function Ondas({ className = '', aneis = 5, animado = false, dur = 12 }: { className?: string; aneis?: number; animado?: boolean; dur?: number }) {
+export function Ondas({ className = '', aneis = 5, animado = false, dur = 12 }: { className?: string; aneis?: number; animado?: boolean; dur?: number }) {
   return (
     <div className={`v2-ondas ${animado ? 'is-animado' : ''} ${className}`} style={{ '--dur': `${dur}s` } as React.CSSProperties} aria-hidden="true">
       {Array.from({ length: aneis }).map((_, i) => (
@@ -682,7 +696,7 @@ function Ondas({ className = '', aneis = 5, animado = false, dur = 12 }: { class
 }
 
 // PRO — direção: uma trajetória que sobe e aponta adiante.
-function Direcao({ className = '' }) {
+export function Direcao({ className = '' }) {
   return (
     <svg viewBox="0 0 80 56" fill="none" className={className} aria-hidden="true">
       <path d="M2 50 L22 38 L36 42 L54 22 L74 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -693,7 +707,7 @@ function Direcao({ className = '' }) {
 }
 
 // H — humano e hub: nós ligados a um centro que respira.
-function Rede({ className = '' }) {
+export function Rede({ className = '' }) {
   const nos = [[14, 14], [50, 6], [86, 16], [94, 44], [74, 58], [30, 60], [6, 42]];
   return (
     <svg viewBox="0 0 100 64" fill="none" className={className} aria-hidden="true">
@@ -706,7 +720,7 @@ function Rede({ className = '' }) {
 }
 
 // Crescimento — barras que sobem.
-function Subida({ className = '' }) {
+export function Subida({ className = '' }) {
   return (
     <svg viewBox="0 0 64 40" fill="none" className={className} aria-hidden="true">
       {[[4, 28], [18, 20], [32, 24], [46, 10]].map(([x, y]) => <rect key={x} x={x} y={y} width="9" height={38 - y} rx="2" fill="currentColor" fillOpacity={0.35 + (40 - y) / 80} />)}

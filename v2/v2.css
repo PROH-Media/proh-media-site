@@ -168,16 +168,48 @@ h1, h2, h3, h4, p, li, blockquote { text-wrap: pretty; }
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
 }
 
-/* ---------- Fotografia da marca: P&B, cor no gesto ---------- */
+/* ---------- Fotografia da marca: cor natural e quente ----------
+   Padrão: cor natural, com um leve ajuste quente para todas as fotos
+   conversarem entre si. P&B virou recurso editorial pontual (.is-pb). */
 .v2-foto {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.04);
+  filter: saturate(0.92) contrast(1.03) sepia(0.06);
   transition: filter 0.6s ease, transform 1.2s var(--curva);
 }
+.v2-foto.is-pb { filter: grayscale(1) contrast(1.04); }
 .v2-foto-moldura { overflow: hidden; position: relative; }
-.v2-foto-moldura:hover .v2-foto { filter: grayscale(0) contrast(1); transform: scale(1.02); }
+.v2-foto-moldura:hover .v2-foto { transform: scale(1.03); }
+.v2-foto-moldura:hover .v2-foto.is-pb { filter: grayscale(0) contrast(1); }
+
+/* ---------- Texturas da marca ---------- */
+/* papel off-white nas superfícies claras */
+.v2-papel {
+  background-color: var(--off);
+  background-image: url('/img/marca/textura-papel-off.webp');
+  background-size: 640px;
+}
+/* pedra nas superfícies escuras */
+.v2-pedra {
+  background-color: var(--preto);
+  background-image: url('/img/marca/textura-escura-pedra.webp');
+  background-size: 560px;
+}
+.v2-kraft {
+  background-image: url('/img/marca/textura-kraft.webp');
+  background-size: cover;
+}
+.v2-terracota {
+  background-color: #C2643A;
+  background-image: url('/img/marca/textura-reboco-terracota.webp');
+  background-size: cover;
+}
+.v2-calcada {
+  background-color: var(--preto);
+  background-image: url('/img/marca/textura-calcada-ondas.webp');
+  background-size: 420px;
+}
 
 /* ---------- Revelação no scroll ---------- */
 .v2-revela {
