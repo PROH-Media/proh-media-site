@@ -574,7 +574,7 @@ export default function BrandKit() {
               <Demo titulo="Faixa contínua" spec="76 s por volta · linear · sem emenda" escuro>
                 {() => <div className="w-full overflow-hidden"><div className="v2-faixa">{[0, 1].map((t) => <div key={t} className="v2-faixa-trilho" style={{ animationDuration: '24s' }}>{['Propagar valor.', 'Propagar ideias.', 'Propagar impacto.'].map((x) => <span key={x} className="font-mirano text-xs font-bold uppercase tracking-[0.2em] text-white whitespace-nowrap mx-6">{x}</span>)}</div>)}</div></div>}
               </Demo>
-              <Demo titulo="Ícone vivo" spec="O desenho se move pelo significado · 1× ao aparecer e a cada entrada do mouse">
+              <Demo titulo="Ícone vivo" spec="Mouse em cima: vai ao estado final e fica · ao sair: volta ao inicial" estatico>
                 {(k) => <div key={k} className="group flex gap-4"><span className="w-14 h-14 rounded-2xl bg-[#0F0F15] text-[#D8D4BD] flex items-center justify-center"><IconeVivo nome="heart-handshake" /></span><span className="w-14 h-14 rounded-full border border-[#0F0F15]/25 flex items-center justify-center"><IconeVivo nome="compass" /></span></div>}
               </Demo>
               <Demo titulo="Foto ao passar o mouse" spec="Aproxima 3% · 1,2 s · nunca troca a cor">
@@ -600,7 +600,7 @@ export default function BrandKit() {
           </Capitulo>
 
           {/* ================= 11 ICONOGRAFIA ================= */}
-          <Capitulo id="icones" n="12" titulo="Iconografia" lead="Linha fina (1,6), cantos arredondados, sempre dentro de um contêiner da marca. Família Lucide — e vivos: cada ícone se move pelo que significa, uma vez quando aparece e de novo quando o mouse passa.">
+          <Capitulo id="icones" n="12" titulo="Iconografia" lead="Linha fina (1,6), cantos arredondados, sempre dentro de um contêiner da marca. Família Lucide — e vivos: com o mouse em cima, cada ícone anima até um estado final com significado; quando o mouse sai, volta ao desenho original.">
             <Cartao>
               <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-7 gap-x-4 gap-y-7">
                 {ICONES_VIVOS.map((nome, k) => (
@@ -610,7 +610,7 @@ export default function BrandKit() {
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-[#0F0F15]/65 mt-7">Passe o mouse para ver cada movimento. Três contêineres: quadrado preto (serviços), círculo com contorno (públicos), quadrado claro (apoio). O movimento nasce do desenho — as mãos se cumprimentam, a agulha procura o norte — nunca um efeito aplicado por fora.</p>
+              <p className="text-sm text-[#0F0F15]/65 mt-7">Passe o mouse e tire: a agulha aponta o norte, o coração do aperto de mão fica cheio, a lâmpada acende, o envelope abre — e tudo volta ao sair. Se o mouse sai no meio, ele volta dali mesmo, sem salto. No celular, cada ícone faz ida e volta uma vez quando aparece. Três contêineres: quadrado preto (serviços), círculo com contorno (públicos), quadrado claro (apoio). O movimento nasce do desenho — as mãos se cumprimentam, a agulha procura o norte — nunca um efeito aplicado por fora.</p>
             </Cartao>
           </Capitulo>
 
@@ -880,11 +880,12 @@ function CopiarCodigo({ rotulo, codigo }) {
 
 // Demonstração de movimento: repete só enquanto está visível, com pausa
 // entre as repetições; o botão "Rever" reinicia na hora.
-function Demo({ titulo, spec, escuro = false, alternar = false, children }) {
+function Demo({ titulo, spec, escuro = false, alternar = false, estatico = false, children }) {
   const ref = React.useRef(null);
   const [chave, setChave] = useState(0);
   const [aberto, setAberto] = useState(true);
   useEffect(() => {
+    if (estatico) return;
     let t = null;
     const obs = new IntersectionObserver(([e]) => {
       clearInterval(t);
@@ -892,13 +893,13 @@ function Demo({ titulo, spec, escuro = false, alternar = false, children }) {
     }, { threshold: 0.4 });
     if (ref.current) obs.observe(ref.current);
     return () => { clearInterval(t); obs.disconnect(); };
-  }, [alternar]);
+  }, [alternar, estatico]);
   return (
     <div ref={ref} className="rounded-[2rem] overflow-hidden border border-[#0F0F15]/10 bg-white flex flex-col">
       <div className={`relative h-48 flex items-center justify-center overflow-hidden px-6 ${escuro ? 'v2-grao bg-[#0F0F15]' : 'bg-[#E6E3D3]'}`}>{children(chave, aberto)}</div>
       <div className="p-5 flex items-start justify-between gap-3">
         <div><p className="font-black uppercase tracking-tight">{titulo}</p><p className="text-xs text-[#0F0F15]/60 mt-1">{spec}</p></div>
-        {!alternar && <button type="button" onClick={() => setChave((c) => c + 1)} className="shrink-0 text-[0.65rem] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border border-[#0F0F15]/20 hover:bg-[#0F0F15] hover:text-[#D8D4BD] transition-colors">Rever</button>}
+        {!alternar && !estatico && <button type="button" onClick={() => setChave((c) => c + 1)} className="shrink-0 text-[0.65rem] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border border-[#0F0F15]/20 hover:bg-[#0F0F15] hover:text-[#D8D4BD] transition-colors">Rever</button>}
       </div>
     </div>
   );

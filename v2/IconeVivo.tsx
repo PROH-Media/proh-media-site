@@ -3,8 +3,10 @@ import React, { useEffect, useRef } from 'react';
 // Ícones vivos: o próprio desenho se move pelo que significa (as mãos se
 // cumprimentam, a agulha procura o norte, a caneta escreve). Geometria
 // idêntica à da Lucide — só as partes que se movem ganharam classe.
-// Loop calmo enquanto o ícone está na tela (pausa fora dela). Cada ícone
-// tem a sua fase, para não pulsarem todos ao mesmo tempo.
+// Hover = ida e volta: com o mouse sobre o cartão (.group), o desenho anima
+// do estado inicial até um estado final com significado e fica nele; ao
+// sair, a mesma animação volta, de onde estiver, ao estado inicial. Em
+// telas sem mouse (toque), faz ida e volta uma vez quando aparece.
 
 const DESENHOS: Record<string, () => React.ReactElement> = {
   'compass': () => (<>
@@ -125,20 +127,43 @@ export function IconeVivo({ nome, size = 22, className = '' }: { nome: string; s
   useEffect(() => {
     const svg = ref.current;
     if (!svg) return;
-    const obs = new IntersectionObserver(([e]) => {
-      svg.classList.toggle('is-animando', e.isIntersecting);
-    }, { threshold: 0.2 });
-    obs.observe(svg);
-    return () => obs.disconnect();
-  }, []);
+    // as animações CSS das partes nascem pausadas no 0% (desenho original);
+    // aqui elas só mudam de sentido — inverter a partir do ponto atual é o
+    // que evita o salto quando o mouse sai no meio do movimento
+    const animacoes = () => svg.getAnimations({ subtree: true });
+    const tocar = (sentido: 1 | -1) => animacoes().forEach((a) => {
+      a.playbackRate = sentido;
+      a.play();
+    });
+    const ida = () => tocar(1);
+    const volta = () => tocar(-1);
 
-  // fase estável por ícone (0 a 2,4 s), derivada do nome
-  const fase = (Array.from(nome).reduce((t, c) => t + c.charCodeAt(0), 0) % 7) * 0.4;
+    const alvo = svg.closest('.group') || svg.parentElement;
+    alvo?.addEventListener('mouseenter', ida);
+    alvo?.addEventListener('mouseleave', volta);
+
+    // toque: sem hover, mostra uma ida e volta quando o ícone aparece
+    let espera: ReturnType<typeof setTimeout> | undefined;
+    const semMouse = window.matchMedia('(hover: none)').matches;
+    const obs = semMouse ? new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      obs?.disconnect();
+      espera = setTimeout(() => { ida(); espera = setTimeout(volta, 1800); }, 300);
+    }, { threshold: 0.6 }) : null;
+    obs?.observe(svg);
+
+    return () => {
+      clearTimeout(espera);
+      obs?.disconnect();
+      alvo?.removeEventListener('mouseenter', ida);
+      alvo?.removeEventListener('mouseleave', volta);
+    };
+  }, []);
 
   const Desenho = DESENHOS[nome];
   if (!Desenho) return null;
   return (
-    <svg ref={ref} viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className={`iv iv-${nome} ${className}`} style={{ '--fase': `${fase}s` } as React.CSSProperties} aria-hidden="true">
+    <svg ref={ref} viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className={`iv iv-${nome} ${className}`} aria-hidden="true">
       <Desenho />
     </svg>
   );
