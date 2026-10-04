@@ -3,8 +3,8 @@ import React, { useEffect, useRef } from 'react';
 // Ícones vivos: o próprio desenho se move pelo que significa (as mãos se
 // cumprimentam, a agulha procura o norte, a caneta escreve). Geometria
 // idêntica à da Lucide — só as partes que se movem ganharam classe.
-// Toca uma vez quando aparece na tela e de novo quando o mouse entra no
-// cartão (.group). Nunca em loop.
+// Loop calmo enquanto o ícone está na tela (pausa fora dela). Cada ícone
+// tem a sua fase, para não pulsarem todos ao mesmo tempo.
 
 const DESENHOS: Record<string, () => React.ReactElement> = {
   'compass': () => (<>
@@ -125,25 +125,20 @@ export function IconeVivo({ nome, size = 22, className = '' }: { nome: string; s
   useEffect(() => {
     const svg = ref.current;
     if (!svg) return;
-    const tocar = () => {
-      svg.classList.remove('is-animando');
-      void svg.getBoundingClientRect();
-      svg.classList.add('is-animando');
-    };
-    let espera: ReturnType<typeof setTimeout> | undefined;
     const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { espera = setTimeout(tocar, 350); obs.disconnect(); }
-    }, { threshold: 0.6 });
+      svg.classList.toggle('is-animando', e.isIntersecting);
+    }, { threshold: 0.2 });
     obs.observe(svg);
-    const alvo = svg.closest('.group') || svg.parentElement;
-    alvo?.addEventListener('mouseenter', tocar);
-    return () => { clearTimeout(espera); obs.disconnect(); alvo?.removeEventListener('mouseenter', tocar); };
+    return () => obs.disconnect();
   }, []);
+
+  // fase estável por ícone (0 a 2,4 s), derivada do nome
+  const fase = (Array.from(nome).reduce((t, c) => t + c.charCodeAt(0), 0) % 7) * 0.4;
 
   const Desenho = DESENHOS[nome];
   if (!Desenho) return null;
   return (
-    <svg ref={ref} viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className={`iv iv-${nome} ${className}`} aria-hidden="true">
+    <svg ref={ref} viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className={`iv iv-${nome} ${className}`} style={{ '--fase': `${fase}s` } as React.CSSProperties} aria-hidden="true">
       <Desenho />
     </svg>
   );

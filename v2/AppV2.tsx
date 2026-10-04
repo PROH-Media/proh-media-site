@@ -190,7 +190,10 @@ export default function AppV2() {
                 <span className="v2-origem" style={{ left: '49%', top: '46%' }} />
               </div>
               <span className="v2-etiqueta absolute left-4 top-4"><b />Ponto de origem</span>
-              <span className="v2-etiqueta is-clara absolute right-4 bottom-4">Alcance em ondas <ArrowUpRight size={12} /></span>
+              <div className="v2-vidro is-fosco absolute left-4 right-4 bottom-4 sm:left-auto sm:w-72 rounded-[1.5rem] p-5 text-[#0F0F15]">
+                <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0F0F15]/60 mb-2 flex items-center gap-2">Alcance em ondas <ArrowUpRight size={12} /></p>
+                <p className="text-base font-bold leading-snug">O valor no centro. O alcance se espalha a partir dele.</p>
+              </div>
             </div>
             <figcaption className="sr-only">O valor no centro e o alcance se propagando em ondas.</figcaption>
           </figure>

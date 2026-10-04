@@ -13,7 +13,7 @@ import { IconeVivo, ICONES_VIVOS } from '../v2/IconeVivo';
 const CAPITULOS = [
   ['essencia', 'Essência'], ['voz', 'Tom de voz'], ['logo', 'Logo'], ['cores', 'Cores'],
   ['tipografia', 'Tipografia'], ['elementos', 'Elementos gráficos'], ['fotografia', 'Fotografia'],
-  ['tratamento', 'Tratamento e LUT'], ['texturas', 'Ruído e onda'], ['movimento', 'Movimento'],
+  ['tratamento', 'Tratamento e LUT'], ['texturas', 'Ruído e onda'], ['vidro', 'Vidro líquido'], ['movimento', 'Movimento'],
   ['icones', 'Iconografia'], ['aplicacoes', 'Aplicações'], ['downloads', 'Downloads'],
 ];
 
@@ -382,14 +382,7 @@ export default function BrandKit() {
                   <div><p className="text-[0.6rem] font-bold uppercase tracking-widest text-white mb-2">Valor percebido</p><div className="relative h-2"><div className="absolute inset-0 rounded-full border border-dashed border-[#D8D4BD]/40" /><div className="absolute left-0 top-0 h-2 w-[42%] rounded-full bg-[#D8D4BD]/45" /></div></div>
                 </div>
               </Elemento>
-              <Elemento nome="Vidro líquido" uso="Material discreto para o que flutua: menu, etiquetas sobre fotos, selos. Translúcido, desfoque e brilho fino na borda — sem distorção, arco-íris ou movimento.">
-                <img src="/img/v2/praca-ondas-pessoas.webp" alt="" className="absolute inset-0 w-full h-full object-cover" />
-                <div className="relative flex flex-col items-center gap-3">
-                  <span className="v2-vidro rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0F0F15]">Menu em vidro</span>
-                  <span className="v2-vidro is-escuro rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#D8D4BD]">Etiqueta escura</span>
-                </div>
-              </Elemento>
-              <Elemento nome="Cartas sobrepostas" uso="Seções que deslizam umas sobre as outras com topo arredondado (40–48 px)." claro>
+                            <Elemento nome="Cartas sobrepostas" uso="Seções que deslizam umas sobre as outras com topo arredondado (40–48 px)." claro>
                 <div className="relative w-48 h-32">
                   <div className="absolute inset-x-0 top-0 h-20 rounded-t-[1.25rem] bg-[#0F0F15]" />
                   <div className="absolute inset-x-0 top-10 h-20 rounded-t-[1.25rem] bg-[#D8D4BD] shadow-[0_-8px_20px_rgba(0,0,0,0.25)]" />
@@ -487,8 +480,72 @@ export default function BrandKit() {
             </a>
           </Capitulo>
 
-          {/* ================= 10 MOVIMENTO ================= */}
-          <Capitulo id="movimento" n="10" titulo="Movimento" lead="A animação acompanha a leitura — nunca a substitui. Entradas curtas e únicas, repetição lenta só no que é decorativo, e nenhuma informação escondida atrás de clique, hover ou espera.">
+          {/* ================= 10 VIDRO LÍQUIDO ================= */}
+          <Capitulo id="vidro" n="10" titulo="Vidro líquido" lead="O material de tudo que flutua sobre imagem e conteúdo: menu, etiquetas, selos, legendas. Transparência que deixa o fundo respirar, desfoque que organiza a leitura e um brilho fino de luz — sempre parado, nunca forçado.">
+            <h3 className="text-xl font-black uppercase tracking-tight mb-4">Três níveis de transparência</h3>
+            <div className="relative rounded-[2rem] overflow-hidden mb-5">
+              <img src="/img/v2/praca-ondas-pessoas.webp" alt="" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="relative grid md:grid-cols-3 gap-4 p-5 md:p-8">
+                {[
+                  ['is-nevoa', 'Névoa', '16% · desfoque 10 px', 'Só para ler o que está atrás: etiquetas curtas.'],
+                  ['', 'Vidro', '40% · desfoque 18 px', 'Padrão: menu, selos, legendas.'],
+                  ['is-fosco', 'Fosco', '66% · desfoque 28 px', 'Textos de duas linhas ou mais sobre imagem.'],
+                ].map(([cls, t, spec, uso]) => (
+                  <div key={t} className="flex flex-col gap-4">
+                    <div className={`v2-vidro ${cls} rounded-[1.5rem] p-5 text-[#0F0F15]`}><p className="font-black uppercase tracking-tight">{t}</p><p className="text-xs font-bold text-[#0F0F15]/70">{spec}</p><p className="text-sm mt-2">{uso}</p></div>
+                    <div className={`v2-vidro is-escuro ${cls} rounded-[1.5rem] p-5 text-[#D8D4BD]`}><p className="font-black uppercase tracking-tight text-white">{t} · fumê</p><p className="text-sm mt-1 text-[#D8D4BD]/85">{uso}</p></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <h3 className="text-xl font-black uppercase tracking-tight mt-10 mb-4">Laboratório</h3>
+            <LaboratorioVidro />
+
+            <div className="grid md:grid-cols-2 gap-5 mt-5 mb-5">
+              <div className="relative rounded-[2rem] overflow-hidden bg-[#0F0F15] h-72 flex items-center justify-center">
+                <Ondas className="w-[130%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#D8D4BD]" aneis={7} animado dur={14} />
+                <div className="relative v2-vidro is-escuro is-nevoa rounded-[1.75rem] px-8 py-6 text-center">
+                  <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#D8D4BD]/70 mb-1">Vidro sobre as ondas</p>
+                  <p className="text-lg font-black text-white">As ondas passam por trás e o vidro as dobra em luz.</p>
+                </div>
+              </div>
+              <ReflexoVidro />
+            </div>
+
+            <Cartao className="mb-5">
+              <Rotulinho>Componentes em vidro</Rotulinho>
+              <div className="relative rounded-2xl overflow-hidden p-6 md:p-8">
+                <img src="/img/marca/estrategia-equipe-parede.webp" alt="" className="absolute inset-0 w-full h-full object-cover" />
+                <div className="relative flex flex-col gap-5">
+                  <div className="v2-vidro rounded-full flex items-center justify-between gap-4 pl-5 pr-2 py-2 max-w-xl">
+                    <img src="/SVG/proh-black-white-s-media.svg" alt="" className="h-5" />
+                    <span className="hidden sm:flex gap-4 text-[0.65rem] font-bold uppercase tracking-wider text-[#0F0F15]"><span>Conceito</span><span>Método</span><span>Contato</span></span>
+                    <span className="rounded-full bg-[#0F0F15] text-[#D8D4BD] px-4 py-2 text-[0.6rem] font-bold uppercase tracking-wider">Começar</span>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <span className="v2-vidro rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#0F0F15]">Botão em vidro</span>
+                    <span className="v2-etiqueta"><b />Etiqueta</span>
+                    <span className="v2-etiqueta is-clara">Etiqueta clara</span>
+                  </div>
+                  <div className="v2-vidro is-fosco rounded-[1.5rem] p-5 max-w-sm text-[#0F0F15]">
+                    <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0F0F15]/60 mb-2">Legenda em vidro fosco</p>
+                    <p className="font-bold leading-snug">Estratégia começa na conversa — referências, rascunhos e escuta.</p>
+                  </div>
+                </div>
+              </div>
+            </Cartao>
+
+            <Cartao>
+              <Rotulinho>Regras</Rotulinho>
+              <div className="grid md:grid-cols-2 gap-x-10 gap-y-3 text-sm">
+                {['Só no que flutua sobre imagem ou conteúdo — nunca como fundo de seção', 'Texto de duas linhas ou mais: use o nível fosco', 'Nunca vidro sobre vidro', 'Parado: sem distorção, sem arco-íris, sem tremer', 'No máximo 3 ou 4 vidros por tela (desempenho e foco)', 'Sem backdrop-filter no navegador, cai para o fosco sólido — sempre legível'].map((t) => <p key={t} className="flex gap-3"><Check className="w-4 h-4 shrink-0 mt-0.5" />{t}</p>)}
+              </div>
+            </Cartao>
+          </Capitulo>
+
+          {/* ================= 11 MOVIMENTO ================= */}
+          <Capitulo id="movimento" n="11" titulo="Movimento" lead="A animação acompanha a leitura — nunca a substitui. Entradas curtas e únicas, repetição lenta só no que é decorativo, e nenhuma informação escondida atrás de clique, hover ou espera.">
             <div className="grid md:grid-cols-3 gap-5 mb-5">
               {[
                 ['A informação não espera', 'Tudo que importa aparece na rolagem. Ninguém precisa clicar, repousar o mouse ou assistir a uma animação para ler.'],
@@ -543,7 +600,7 @@ export default function BrandKit() {
           </Capitulo>
 
           {/* ================= 11 ICONOGRAFIA ================= */}
-          <Capitulo id="icones" n="11" titulo="Iconografia" lead="Linha fina (1,6), cantos arredondados, sempre dentro de um contêiner da marca. Família Lucide — e vivos: cada ícone se move pelo que significa, uma vez quando aparece e de novo quando o mouse passa.">
+          <Capitulo id="icones" n="12" titulo="Iconografia" lead="Linha fina (1,6), cantos arredondados, sempre dentro de um contêiner da marca. Família Lucide — e vivos: cada ícone se move pelo que significa, uma vez quando aparece e de novo quando o mouse passa.">
             <Cartao>
               <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-7 gap-x-4 gap-y-7">
                 {ICONES_VIVOS.map((nome, k) => (
@@ -558,7 +615,7 @@ export default function BrandKit() {
           </Capitulo>
 
           {/* ================= 10 APLICAÇÕES ================= */}
-          <Capitulo id="aplicacoes" n="12" titulo="Aplicações" lead="O sistema em uso: redes sociais, papelaria e apresentações. Modelos prontos para servir de referência.">
+          <Capitulo id="aplicacoes" n="13" titulo="Aplicações" lead="O sistema em uso: redes sociais, papelaria e apresentações. Modelos prontos para servir de referência.">
             <div className="grid md:grid-cols-[1fr_0.62fr_1fr] gap-5 items-start mb-5">
               {/* Post de feed 4:5 */}
               <Peca rotulo="Post · feed 4:5">
@@ -641,7 +698,7 @@ export default function BrandKit() {
           </Capitulo>
 
           {/* ================= 11 DOWNLOADS ================= */}
-          <Capitulo id="downloads" n="13" titulo="Downloads" lead="Arquivos-fonte do sistema. As fontes são licenciadas: instale a partir dos arquivos oficiais do projeto.">
+          <Capitulo id="downloads" n="14" titulo="Downloads" lead="Arquivos-fonte do sistema. As fontes são licenciadas: instale a partir dos arquivos oficiais do projeto.">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 ['Logos oficiais (18 SVG)', 'Pasta SVG/ do projeto', '/SVG/proh-black.svg'],
@@ -754,6 +811,58 @@ function ComparadorLUT() {
           <button key={l.id} type="button" onClick={() => setLut(l.id)} className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${lut === l.id ? 'bg-[#0F0F15] text-[#D8D4BD]' : 'bg-[#E6E3D3] hover:bg-white'}`}>{l.nome}</button>
         ))}
         <span className="ml-auto self-center text-xs text-[#0F0F15]/55">Arraste para comparar</span>
+      </div>
+    </div>
+  );
+}
+
+// Laboratório de vidro: ajuste transparência e desfoque sobre fundos reais.
+function LaboratorioVidro() {
+  const [transp, setTransp] = useState(40);
+  const [desfoque, setDesfoque] = useState(18);
+  const [escuro, setEscuro] = useState(false);
+  const [fundo, setFundo] = useState('foto');
+  const a = transp / 100;
+  const b = +(a * 0.6).toFixed(2);
+  const css = `--vidro-a: ${a}; --vidro-b: ${b}; --vidro-blur: ${desfoque}px;`;
+  return (
+    <div className="rounded-[2rem] bg-white/70 border border-white p-4 md:p-5">
+      <div className={`relative h-80 rounded-2xl overflow-hidden flex items-center justify-center ${fundo !== 'foto' ? 'bg-[#0F0F15]' : ''}`}>
+        {fundo === 'foto' && <img src="/img/marca/projeto-social-horta.webp" alt="" className="absolute inset-0 w-full h-full object-cover" />}
+        {fundo === 'ondas' && <Ondas className="w-[120%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[#D8D4BD]" aneis={7} animado dur={12} />}
+        {fundo === 'texto' && <p className="absolute inset-0 p-6 text-5xl md:text-7xl font-black leading-[0.95] text-[#D8D4BD] tracking-tighter select-none" aria-hidden="true">PROPAGAR VALOR PROPAGAR IDEIAS PROPAGAR IMPACTO</p>}
+        <div className={`relative v2-vidro ${escuro ? 'is-escuro' : ''} rounded-[1.75rem] p-6 w-72 ${escuro ? 'text-[#D8D4BD]' : 'text-[#0F0F15]'}`} style={{ '--vidro-a': a, '--vidro-b': b, '--vidro-blur': `${desfoque}px` } as React.CSSProperties}>
+          <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] opacity-70 mb-2">Vidro líquido</p>
+          <p className={`text-lg font-black leading-snug ${escuro ? 'text-white' : ''}`}>Transparência {transp}% · desfoque {desfoque} px</p>
+        </div>
+      </div>
+      <div className="grid md:grid-cols-[1fr_1fr_auto_auto] gap-4 md:gap-6 items-end mt-5">
+        <label className="text-xs font-bold uppercase tracking-wider">Transparência · {transp}%
+          <input type="range" min={5} max={85} value={transp} onChange={(e) => setTransp(+e.target.value)} className="w-full mt-2 accent-[#0F0F15]" />
+        </label>
+        <label className="text-xs font-bold uppercase tracking-wider">Desfoque · {desfoque} px
+          <input type="range" min={0} max={40} value={desfoque} onChange={(e) => setDesfoque(+e.target.value)} className="w-full mt-2 accent-[#0F0F15]" />
+        </label>
+        <div className="flex gap-1.5">{[['foto', 'Foto'], ['ondas', 'Ondas'], ['texto', 'Texto']].map(([id, t]) => <button key={id} type="button" onClick={() => setFundo(id)} className={`px-3 py-2 rounded-full text-[0.65rem] font-bold uppercase tracking-wider ${fundo === id ? 'bg-[#0F0F15] text-[#D8D4BD]' : 'bg-[#E6E3D3]'}`}>{t}</button>)}</div>
+        <button type="button" onClick={() => setEscuro((v) => !v)} className="px-3 py-2 rounded-full text-[0.65rem] font-bold uppercase tracking-wider bg-[#E6E3D3]">{escuro ? 'Fumê' : 'Claro'}</button>
+      </div>
+      <div className="mt-4"><CopiarCodigo rotulo={`CSS · .v2-vidro${escuro ? '.is-escuro' : ''}`} codigo={css} /></div>
+    </div>
+  );
+}
+
+// Opcional: um reflexo de luz que acompanha o cursor, bem sutil.
+function ReflexoVidro() {
+  const [p, setP] = useState({ x: 30, y: 20, on: false });
+  return (
+    <div className="relative rounded-[2rem] overflow-hidden h-72 flex items-center justify-center"
+      onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); setP({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100, on: true }); }}
+      onPointerLeave={() => setP((v) => ({ ...v, on: false }))}>
+      <img src="/img/marca/empreendedora-atelie.webp" alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <div className="relative v2-vidro rounded-[1.75rem] px-8 py-6 w-80 text-[#0F0F15] overflow-hidden">
+        <span className="absolute inset-0 pointer-events-none transition-opacity duration-500" style={{ opacity: p.on ? 1 : 0, background: `radial-gradient(circle at ${p.x}% ${p.y}%, rgba(255,255,255,0.45), transparent 45%)` }} aria-hidden="true" />
+        <p className="relative text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0F0F15]/60 mb-1">Opcional · reflexo</p>
+        <p className="relative text-lg font-black leading-snug">Passe o mouse: a luz acompanha, sem pressa.</p>
       </div>
     </div>
   );
