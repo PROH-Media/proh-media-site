@@ -9,11 +9,12 @@ export default defineConfig({
   base: './',
   plugins: [react()],
   build: {
-    // Duas páginas independentes: o site atual (raiz) e a v2 (/v2/).
+    // Páginas independentes: o site atual (raiz), a v2 (/v2/) e a v2.1 (/v2.1/).
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
         v2: resolve(__dirname, 'v2/index.html'),
+        v21: resolve(__dirname, 'v2.1/index.html'),
       },
     },
   },

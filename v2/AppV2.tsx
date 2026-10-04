@@ -8,6 +8,8 @@ import {
 import { IconeVivo } from './IconeVivo';
 import logoClaro from '../SVG/proh-black-white.svg';
 import logoEscuro from '../SVG/proh-white-off.svg';
+// sobre seções brancas o H branco sumiria: logo toda preta (versão oficial)
+import logoBranco from '../SVG/proh-black.svg';
 
 // --- CONFIGURAÇÃO (mesmas integrações da v1) ---
 const WHATSAPP_NUMBER = '5519995951316';
@@ -32,18 +34,20 @@ const METODO = [
 export default function AppV2() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [headerEscuro, setHeaderEscuro] = useState(false);
+  const [headerBranco, setHeaderBranco] = useState(false);
   const [secaoAtiva, setSecaoAtiva] = useState('');
 
   useEffect(() => {
     // Header camaleão: a seção sob a pílula define o tema (data-tema).
     const secoes = Array.from(document.querySelectorAll('[data-tema]'));
     const aoRolar = () => {
-      let escuro = false;
+      let tema = 'claro';
       for (const el of secoes) {
         const r = el.getBoundingClientRect();
-        if (r.top <= 64 && r.bottom > 64) escuro = (el as HTMLElement).dataset.tema === 'escuro';
+        if (r.top <= 64 && r.bottom > 64) tema = (el as HTMLElement).dataset.tema || 'claro';
       }
-      setHeaderEscuro(escuro);
+      setHeaderEscuro(tema === 'escuro');
+      setHeaderBranco(tema === 'branco');
     };
     window.addEventListener('scroll', aoRolar, { passive: true });
     window.addEventListener('load', aoRolar);
@@ -123,7 +127,7 @@ export default function AppV2() {
         <div className={`v2-vidro max-w-7xl mx-auto overflow-hidden rounded-[2rem] transition-colors duration-500 ${headerEscuro ? 'is-escuro' : ''}`}>
           <div className="flex items-center justify-between gap-4 py-3 px-5 lg:pl-[19px] lg:pr-3">
             <a href="#inicio" onClick={fecharMenu} className="h-[1.9rem] flex items-start shrink-0" aria-label="PROH Media — início">
-              <img src={headerEscuro ? logoEscuro : logoClaro} alt="PROH Media" className="h-[131%] w-auto" />
+              <img src={headerEscuro ? logoEscuro : headerBranco ? logoBranco : logoClaro} alt="PROH Media" className="h-[131%] w-auto" />
             </a>
             <nav className={`hidden lg:flex items-center gap-1 text-[0.8rem] font-bold tracking-wider uppercase ${headerEscuro ? 'text-[#D8D4BD]' : 'text-[#0F0F15]'}`}>
               {NAV.map(({ id, rotulo }) => (
@@ -310,7 +314,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 03 DUAS DIMENSÕES ================= */}
-      <section id="dimensoes" data-tema="claro" className="v2-carta v2-sombra-clara z-[40] bg-white md:min-h-screen flex flex-col justify-center py-24">
+      <section id="dimensoes" data-tema="branco" className="v2-carta v2-sombra-clara z-[40] bg-white md:min-h-screen flex flex-col justify-center py-24">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12 md:mb-14">
             <Rotulo n="03">Duas dimensões do valor</Rotulo>
@@ -407,7 +411,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 06 DIFERENCIAIS ================= */}
-      <section id="diferenciais" data-tema="claro" className="v2-carta v2-sombra-clara z-[70] bg-white py-24 md:py-28">
+      <section id="diferenciais" data-tema="branco" className="v2-carta v2-sombra-clara z-[70] bg-white py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
           <div className="v2-revela mb-12">
             <Rotulo n="06">Diferenciais</Rotulo>
@@ -593,7 +597,7 @@ export default function AppV2() {
       </section>
 
       {/* ================= 11 FAQ ================= */}
-      <section id="faq" data-tema="claro" className="v2-carta v2-sombra-clara z-[120] bg-white py-24 md:py-28">
+      <section id="faq" data-tema="branco" className="v2-carta v2-sombra-clara z-[120] bg-white py-24 md:py-28">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
           <div className="v2-revela lg:sticky lg:top-28 self-start">
             <Rotulo n="11">Perguntas frequentes</Rotulo>
@@ -758,7 +762,7 @@ function Dimensao({ claro = false, foto, alt, rotulo, titulo, intro, itens, resu
 
 // Faixa de mensagens da marca (herdada da v1).
 const FAIXA = ['Propagar valor.', 'Propagar marcas.', 'Propagar ideias.', 'Propagar resultados.', 'Propagar conexões.', 'Propagar impacto.', 'Propagar o que importa.'];
-function Faixa() {
+export function Faixa() {
   const trilho = (
     <div className="v2-faixa-trilho">
       {FAIXA.map((t) => (
